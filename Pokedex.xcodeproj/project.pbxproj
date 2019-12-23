@@ -17,6 +17,7 @@
 		CFEBCC3423B15522004E0F73 /* Pokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFEBCC3123B15522004E0F73 /* Pokemon.swift */; };
 		CFEBCC3523B15522004E0F73 /* PokeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFEBCC3223B15522004E0F73 /* PokeType.swift */; };
 		CFEBCC3723B1553F004E0F73 /* PokeTypesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFEBCC3623B1553F004E0F73 /* PokeTypesTableViewController.swift */; };
+		CFEBCC3E23B15B4B004E0F73 /* PokedexViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFEBCC3D23B15B4B004E0F73 /* PokedexViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +45,7 @@
 		CFEBCC3123B15522004E0F73 /* Pokemon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pokemon.swift; sourceTree = "<group>"; };
 		CFEBCC3223B15522004E0F73 /* PokeType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PokeType.swift; sourceTree = "<group>"; };
 		CFEBCC3623B1553F004E0F73 /* PokeTypesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PokeTypesTableViewController.swift; sourceTree = "<group>"; };
+		CFEBCC3D23B15B4B004E0F73 /* PokedexViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PokedexViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +92,7 @@
 				CFB6707B23B1537200F33E80 /* SceneDelegate.swift */,
 				CFB6707F23B1537200F33E80 /* Main.storyboard */,
 				CFEBCC3623B1553F004E0F73 /* PokeTypesTableViewController.swift */,
+				CFEBCC3D23B15B4B004E0F73 /* PokedexViewModel.swift */,
 				CFB6708223B1537200F33E80 /* Assets.xcassets */,
 				CFB6708423B1537200F33E80 /* LaunchScreen.storyboard */,
 				CFB6708723B1537200F33E80 /* Info.plist */,
@@ -223,6 +226,7 @@
 				CFB6707C23B1537200F33E80 /* SceneDelegate.swift in Sources */,
 				CFEBCC3523B15522004E0F73 /* PokeType.swift in Sources */,
 				CFEBCC3323B15522004E0F73 /* PokeTypeDetail.swift in Sources */,
+				CFEBCC3E23B15B4B004E0F73 /* PokedexViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
