@@ -10,23 +10,43 @@ import UIKit
 
 class PokeTypesTableViewController: UITableViewController {
 
+    
+    private var tableViewData = [PokeTypeUrl]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         
         let pokedexViewModel = PokedexViewModel()
+        pokedexViewModel.retrievePokeTypes { (results) in
+            switch results {
+            case .success(let data):
+//                print(data)
+                self.tableViewData = data
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
         
-        pokedexViewModel.fetchTypes()
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
+        return tableViewData.count
     }
    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "pokeTypeCell", for: indexPath)
+        
+        cell.textLabel?.text = self.tableViewData[indexPath.row].name
+        
+        return cell
+    }
 }

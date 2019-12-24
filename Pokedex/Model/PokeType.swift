@@ -13,7 +13,16 @@ struct PokeType: Decodable{
     let results: [PokeTypeUrl]
 }
 
+extension PokeType {
+    init() {
+        count = 0
+        results = []
+    }
+}
+
 struct PokeTypeUrl: Decodable {
     let name: String
     let url: String
 }
+
+
