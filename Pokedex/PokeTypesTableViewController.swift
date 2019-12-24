@@ -21,7 +21,6 @@ class PokeTypesTableViewController: UITableViewController {
         pokedexViewModel.retrievePokeTypes { (results) in
             switch results {
             case .success(let data):
-//                print(data)
                 self.tableViewData = data
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
@@ -42,11 +41,19 @@ class PokeTypesTableViewController: UITableViewController {
     }
    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: "pokeTypeCell", for: indexPath)
-        
         cell.textLabel?.text = self.tableViewData[indexPath.row].name
-        
         return cell
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "pokemonListSegue"){
+            
+            guard let destinationViewController = segue.destination as? PokemonTableViewController else { return }
+            
+            guard let index = self.tableView.indexPathForSelectedRow?.row else { return }
+            destinationViewController.type = self.tableViewData[index]
+            
+        }
     }
 }

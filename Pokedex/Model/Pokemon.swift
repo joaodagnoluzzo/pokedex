@@ -15,7 +15,6 @@ struct Pokemon: Decodable {
     let weight: Int
     let sprites: Sprites
     let height: Int
-    
 }
 
 struct Abilities: Decodable {

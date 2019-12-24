@@ -13,6 +13,13 @@ struct PokeTypeDetail: Decodable{
     let pokemon: [PokemonPreview]
 }
 
+extension PokeTypeDetail {
+    init(){
+        name = ""
+        pokemon = []
+    }
+}
+
 struct PokemonPreview: Decodable{
     let pokemon: PokeUrl
 }

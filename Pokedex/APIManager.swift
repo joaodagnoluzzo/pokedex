@@ -11,12 +11,12 @@ import Foundation
 
 final class APIManager {
     
-    private let apiBaseHttp = "https://pokeapi.co/api/v2"
+    private let apiBaseUrl = "https://pokeapi.co/api/v2"
     
     func fetchPokeTypes(completion: @escaping (Result<PokeType, Error>)-> Void) {
               
-        let requestHttp = "\(apiBaseHttp)/type/"
-        guard let requestURL = URL(string: requestHttp) else {return}
+        let requestHttp = "\(apiBaseUrl)/type/"
+        guard let requestURL = URL(string: requestHttp) else { return }
         
         let task = URLSession.shared.dataTask(with: requestURL, completionHandler: { (data, response, error) -> Void in
           
@@ -28,7 +28,6 @@ final class APIManager {
                 completion(.success(self.decodePokeType(data: data)))
             }
         })
-
         task.resume()
     }
     
@@ -42,5 +41,34 @@ final class APIManager {
         }
         return pokeTypes
     }
+    
+    func fetchPokemonsForType(url: String, completion: @escaping (Result<PokeTypeDetail, Error>)-> Void){
+        
+        guard let requestUrl = URL(string:url) else { return }
+        
+        let task = URLSession.shared.dataTask(with: requestUrl, completionHandler: { (data, response, error) -> Void in
+            
+            if let error = error {
+                completion(.failure(error))
+            }
+            
+            if let data = data {
+                completion(.success(self.decodePokeTypeDetails(data: data)))
+            }
+        })
+        task.resume()
+    }
+    
+    private func decodePokeTypeDetails(data: Data) -> PokeTypeDetail {
+        var pokeTypeDetails = PokeTypeDetail()
+        do {
+            let result = try JSONDecoder().decode(PokeTypeDetail.self, from: data)
+            pokeTypeDetails = result
+        } catch {
+            print("JSON Decoding Error: \(error)")
+        }
+        return pokeTypeDetails
+    }
+   
     
 }

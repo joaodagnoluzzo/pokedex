@@ -19,6 +19,7 @@
 		CFEBCC3723B1553F004E0F73 /* PokeTypesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFEBCC3623B1553F004E0F73 /* PokeTypesTableViewController.swift */; };
 		CFEBCC3E23B15B4B004E0F73 /* PokedexViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFEBCC3D23B15B4B004E0F73 /* PokedexViewModel.swift */; };
 		CFEBCC4123B2271A004E0F73 /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFEBCC4023B2271A004E0F73 /* APIManager.swift */; };
+		CFEBCC4323B24702004E0F73 /* PokemonTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFEBCC4223B24702004E0F73 /* PokemonTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +49,7 @@
 		CFEBCC3623B1553F004E0F73 /* PokeTypesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PokeTypesTableViewController.swift; sourceTree = "<group>"; };
 		CFEBCC3D23B15B4B004E0F73 /* PokedexViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PokedexViewModel.swift; sourceTree = "<group>"; };
 		CFEBCC4023B2271A004E0F73 /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
+		CFEBCC4223B24702004E0F73 /* PokemonTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +94,7 @@
 				CFEBCC3F23B15DB0004E0F73 /* Delegates */,
 				CFEBCC2F23B154FD004E0F73 /* Model */,
 				CFB6707F23B1537200F33E80 /* Main.storyboard */,
+				CFEBCC4223B24702004E0F73 /* PokemonTableViewController.swift */,
 				CFEBCC3623B1553F004E0F73 /* PokeTypesTableViewController.swift */,
 				CFEBCC3D23B15B4B004E0F73 /* PokedexViewModel.swift */,
 				CFEBCC4023B2271A004E0F73 /* APIManager.swift */,
@@ -231,6 +234,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CFEBCC4323B24702004E0F73 /* PokemonTableViewController.swift in Sources */,
 				CFEBCC4123B2271A004E0F73 /* APIManager.swift in Sources */,
 				CFEBCC3723B1553F004E0F73 /* PokeTypesTableViewController.swift in Sources */,
 				CFEBCC3423B15522004E0F73 /* Pokemon.swift in Sources */,

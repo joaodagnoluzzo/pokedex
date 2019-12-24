@@ -25,5 +25,27 @@ final class PokedexViewModel {
             }
         }
     }
+    
+    func retrievePokemonList(typeUrl: String, completion: @escaping (Result<[PokeUrl], Error>) -> Void){
+        
+        self.apiManager.fetchPokemonsForType(url: typeUrl) { (results) in
+            switch results {
+            case .success(let data):
+                completion(.success(self.parseTypeDetailsIntoPokemonList(data: data)))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
 
+    private func parseTypeDetailsIntoPokemonList(data: PokeTypeDetail) -> [PokeUrl]{
+        
+        var listOfPokeUrls = [PokeUrl]()
+        
+        for pokePreview in data.pokemon {
+            listOfPokeUrls.append(pokePreview.pokemon)
+        }
+        
+        return listOfPokeUrls
+    }
 }
