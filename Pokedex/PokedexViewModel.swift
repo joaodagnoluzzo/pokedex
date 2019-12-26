@@ -18,12 +18,20 @@ final class PokedexViewModel {
         self.apiManager.fetchPokeTypes { results in
             switch results{
             case .success(let data):
-                completion(.success(data.results))
-                
+                completion(.success(self.formatTypes(list: data.results)))
             case .failure(let error):
                 completion(.failure(error))
             }
         }
+    }
+    
+    private func formatTypes(list: [PokeTypeUrl]) -> [PokeTypeUrl]{
+        var listWithFormattedPokeTypes = [PokeTypeUrl]()
+        for pokeType in list {
+            let newType = PokeTypeUrl(name: pokeType.name.capitalizeFirstLetter(), url: pokeType.url)
+            listWithFormattedPokeTypes.append(newType)
+        }
+        return listWithFormattedPokeTypes
     }
     
     func retrievePokemonList(typeUrl: String, completion: @escaping (Result<[PokeUrl], Error>) -> Void){
@@ -37,15 +45,22 @@ final class PokedexViewModel {
             }
         }
     }
+    
+    private func formatPokemonList(list: [PokeUrl]) -> [PokeUrl]{
+        var listWithFormattedNames = [PokeUrl]()
+        for pokemon in list {
+            let newPokemon = PokeUrl(name: pokemon.name.capitalizeWordWithDashSeparator(), url: pokemon.url)
+            listWithFormattedNames.append(newPokemon)
+        }
+        return listWithFormattedNames
+    }
 
     private func parseTypeDetailsIntoPokemonList(data: PokeTypeDetail) -> [PokeUrl]{
-        
         var listOfPokeUrls = [PokeUrl]()
-        
         for pokePreview in data.pokemon {
             listOfPokeUrls.append(pokePreview.pokemon)
         }
-        
+        listOfPokeUrls = self.formatPokemonList(list: listOfPokeUrls)
         return listOfPokeUrls
     }
     
@@ -74,7 +89,8 @@ final class PokedexViewModel {
     func formatAbilities(abilities: [Abilities]) -> String {
         var formattedText = ""
         for item in abilities {
-            formattedText += "\(item.ability.name)\n"
+            let formattedAbilityName = item.ability.name.capitalizeWordWithDashSeparator()
+            formattedText += "\(formattedAbilityName)\n"
         }
         return formattedText
     }

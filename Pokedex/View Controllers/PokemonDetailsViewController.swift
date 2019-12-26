@@ -26,6 +26,19 @@ class PokemonDetailsViewController: UIViewController {
         self.retrieveData(pokemonUrl: pokemonUrl)
     }
     
+    private func setTextViewStyle(){
+        let style = NSMutableParagraphStyle()
+        style.lineSpacing = 20
+        
+        guard let font = UIFont(name: "PokemonGB", size: 17) else { return }
+        let attributes = [NSAttributedString.Key.paragraphStyle: style,
+                          NSAttributedString.Key.font: font]
+        
+        guard let textView = self.pokemonAbilitiesTextView else { return }
+        guard let currentText = self.pokemonAbilitiesTextView!.text else { return }
+        textView.attributedText = NSAttributedString(string: currentText, attributes:attributes)
+    }
+    
     private func setTitle(pokemonUrl: PokeUrl?){
         guard let pokemonUrl = pokemonUrl else { return }
         self.title = pokemonUrl.name
@@ -37,7 +50,6 @@ class PokemonDetailsViewController: UIViewController {
             switch results {
             case .success(let pokemon):
                 self.setupViews(pokemon: pokemon)
-                
             case .failure(let error):
                 print("\(error)")
             }
@@ -71,6 +83,7 @@ class PokemonDetailsViewController: UIViewController {
     private func setPokemonAbilities(abilities: [Abilities]){
         DispatchQueue.main.async {
             self.pokemonAbilitiesTextView?.text = self.pokedexViewModel.formatAbilities(abilities: abilities)
+            self.setTextViewStyle()
         }
     }
 }
