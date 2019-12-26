@@ -48,4 +48,34 @@ final class PokedexViewModel {
         
         return listOfPokeUrls
     }
+    
+    func retrievePokemonDetails(pokemonUrl: String, completion: @escaping (Result<Pokemon, Error>) -> Void){
+        
+        self.apiManager.fetchPokemonDetails(url: pokemonUrl) { (results) in
+            switch results {
+            case .success(let data):
+                completion(.success(data))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    func formatPokemonHeight(height: Int) -> String {
+        let heightValue:Double = Double(height) * 0.1
+        return String(format: "%.1f m", heightValue)
+    }
+    
+    func formatPokemonWeight(weight: Int) -> String {
+        let weightValue:Double = Double(weight) * 0.1
+        return String(format: "%.1f Kg", weightValue)
+    }
+    
+    func formatAbilities(abilities: [Abilities]) -> String {
+        var formattedText = ""
+        for item in abilities {
+            formattedText += "\(item.ability.name)\n"
+        }
+        return formattedText
+    }
 }

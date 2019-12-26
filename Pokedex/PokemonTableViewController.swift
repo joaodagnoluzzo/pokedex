@@ -19,10 +19,17 @@ class PokemonTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.setTitle(pokeType: type)
+        self.retrieveData(pokeType: type)
+    }
+    
+    private func setTitle(pokeType: PokeTypeUrl?){
         guard let type = type else { return }
         self.title = type.name + " type pokemons"
-        
+    }
+    
+    private func retrieveData(pokeType: PokeTypeUrl?){
+        guard let type = type else { return }
         self.pokedexViewModel.retrievePokemonList(typeUrl: type.url) { (results) in
             switch results {
             case .success(let data):
@@ -48,6 +55,17 @@ class PokemonTableViewController: UITableViewController {
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "pokemonListCell", for: indexPath)
         cell.textLabel?.text = self.pokemonTableViewData[indexPath.row].name
         return cell
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "pokemonDetailSegue"){
+            
+            guard let destinationViewController = segue.destination as? PokemonDetailsViewController else { return }
+            
+            guard let index = self.tableView.indexPathForSelectedRow?.row else { return }
+            destinationViewController.pokemonUrl = self.pokemonTableViewData[index]
+            
+        }
     }
 
 }

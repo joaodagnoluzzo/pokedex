@@ -17,6 +17,16 @@ struct Pokemon: Decodable {
     let height: Int
 }
 
+extension Pokemon {
+    init() {
+        abilities = []
+        name = ""
+        weight = 0
+        sprites = Sprites(frontDefault: "")
+        height = 0
+    }
+}
+
 struct Abilities: Decodable {
     let ability: Ability
     let is_hidden: Bool

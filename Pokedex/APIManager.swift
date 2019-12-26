@@ -70,5 +70,32 @@ final class APIManager {
         return pokeTypeDetails
     }
    
+    func fetchPokemonDetails(url: String, completion: @escaping (Result<Pokemon, Error>) -> Void){
+        
+        guard let requestUrl = URL(string: url) else { return }
+        
+        let task = URLSession.shared.dataTask(with: requestUrl, completionHandler: { (data, response, error) -> Void in
+            
+            if let error = error {
+                completion(.failure(error))
+            }
+            
+            if let data = data {
+                completion(.success(self.decodePokemonDetails(data: data)))
+            }
+        })
+        task.resume()
+    }
+    
+    private func decodePokemonDetails(data: Data) -> Pokemon {
+        var pokemon = Pokemon()
+        do {
+            let result = try JSONDecoder().decode(Pokemon.self, from: data)
+            pokemon = result
+        } catch {
+            print("JSON Decoding Error: \(error)")
+        }
+        return pokemon
+    }
     
 }
