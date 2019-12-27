@@ -25,6 +25,7 @@
 		CFEBCC3E23B15B4B004E0F73 /* PokedexViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFEBCC3D23B15B4B004E0F73 /* PokedexViewModel.swift */; };
 		CFEBCC4123B2271A004E0F73 /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFEBCC4023B2271A004E0F73 /* APIManager.swift */; };
 		CFEBCC4323B24702004E0F73 /* PokemonTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFEBCC4223B24702004E0F73 /* PokemonTableViewController.swift */; };
+		CFF3928B23B62DA100B5B453 /* LoadSpinnerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFF3928A23B62DA100B5B453 /* LoadSpinnerViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +61,7 @@
 		CFEBCC3D23B15B4B004E0F73 /* PokedexViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PokedexViewModel.swift; sourceTree = "<group>"; };
 		CFEBCC4023B2271A004E0F73 /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
 		CFEBCC4223B24702004E0F73 /* PokemonTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonTableViewController.swift; sourceTree = "<group>"; };
+		CFF3928A23B62DA100B5B453 /* LoadSpinnerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadSpinnerViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +97,7 @@
 				CFAAD9E723B4C9FA0054196D /* PokemonDetailsViewController.swift */,
 				CFEBCC4223B24702004E0F73 /* PokemonTableViewController.swift */,
 				CFEBCC3623B1553F004E0F73 /* PokeTypesTableViewController.swift */,
+				CFF3928A23B62DA100B5B453 /* LoadSpinnerViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -283,6 +286,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CFF3928B23B62DA100B5B453 /* LoadSpinnerViewController.swift in Sources */,
 				CFAAD9EC23B4F4330054196D /* StringExtensions.swift in Sources */,
 				CFEBCC4323B24702004E0F73 /* PokemonTableViewController.swift in Sources */,
 				CFAAD9E823B4C9FA0054196D /* PokemonDetailsViewController.swift in Sources */,

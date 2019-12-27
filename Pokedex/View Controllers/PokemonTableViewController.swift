@@ -8,18 +8,18 @@
 
 import UIKit
 
-class PokemonTableViewController: UITableViewController {
+final class PokemonTableViewController: UITableViewController {
 
     
     var type: PokeTypeUrl?
-
     private var pokemonTableViewData = [PokeUrl]()
-    
-    let pokedexViewModel = PokedexViewModel()
+    private let pokedexViewModel = PokedexViewModel()
+    private var loadSpinner = UIActivityIndicatorView(style: .large)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setTitle(pokeType: type)
+        self.loadSpinner.setupTableViewIndicator(view: self.view)
         self.retrieveData(pokeType: type)
     }
     
@@ -30,16 +30,26 @@ class PokemonTableViewController: UITableViewController {
     
     private func retrieveData(pokeType: PokeTypeUrl?){
         guard let type = type else { return }
+        self.loadSpinner.startAnimating()
         self.pokedexViewModel.retrievePokemonList(typeUrl: type.url) { (results) in
             switch results {
             case .success(let data):
                 self.pokemonTableViewData = data
                 DispatchQueue.main.async {
+                    self.loadSpinner.stopAnimating()
                     self.tableView.reloadData()
                 }
-            case .failure(let error):
-                print(error)
+            case .failure(_):
+                self.handleError()
             }
+        }
+    }
+    
+    private func handleError(){
+        DispatchQueue.main.async {
+            self.loadSpinner.stopAnimating()
+            let errorMsg = UIAlertController(errorMessage: "Oops, It seems we lost our pokémons! Check your Pokenet connection.")
+            self.present(errorMsg, animated: true, completion: nil)
         }
     }
 
@@ -49,6 +59,10 @@ class PokemonTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.pokemonTableViewData.count
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return CGFloat(self.pokedexViewModel.getDefinedCellHeight())
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -61,7 +75,6 @@ class PokemonTableViewController: UITableViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "pokemonDetailSegue"){
-            
             guard let destinationViewController = segue.destination as? PokemonDetailsViewController else { return }
             guard let index = self.tableView.indexPathForSelectedRow?.row else { return }
             destinationViewController.pokemonUrl = self.pokemonTableViewData[index]

@@ -57,3 +57,19 @@ extension UITableViewCell {
         self.textLabel?.font = UIFont(name: "PokemonGB", size: 17)
     }
 }
+
+extension UIActivityIndicatorView {
+    func setupTableViewIndicator(view: UIView){
+        self.hidesWhenStopped = true
+        self.style = .large
+        self.center = view.center
+        view.addSubview(self)
+    }
+}
+
+extension UIAlertController {
+    convenience init(errorMessage: String){
+        self.init(title: "Error", message: errorMessage, preferredStyle: .alert)
+        self.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+    }
+}
