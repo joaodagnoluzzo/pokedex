@@ -49,7 +49,7 @@ final class PokeTypesTableViewController: UITableViewController {
     private func handleError(){
         DispatchQueue.main.async {
             self.loadSpinner.stopAnimating()
-            let errorMsg = UIAlertController(errorMessage: "PokeTypes not found! Check your Pokenet connection.")
+            let errorMsg = UIAlertController(title: "Error", errorMessage: "PokeTypes not found! Check your Pokenet connection.")
             self.present(errorMsg, animated: true, completion: nil)
         }
     }

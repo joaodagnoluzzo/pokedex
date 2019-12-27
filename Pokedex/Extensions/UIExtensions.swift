@@ -68,8 +68,8 @@ extension UIActivityIndicatorView {
 }
 
 extension UIAlertController {
-    convenience init(errorMessage: String){
-        self.init(title: "Error", message: errorMessage, preferredStyle: .alert)
+    convenience init(title: String, errorMessage: String){
+        self.init(title: title, message: errorMessage, preferredStyle: .alert)
         self.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
     }
 }

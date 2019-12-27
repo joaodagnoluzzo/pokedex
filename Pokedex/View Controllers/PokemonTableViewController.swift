@@ -38,6 +38,7 @@ final class PokemonTableViewController: UITableViewController {
                 DispatchQueue.main.async {
                     self.loadSpinner.stopAnimating()
                     self.tableView.reloadData()
+                    self.handleEmptyList()
                 }
             case .failure(_):
                 self.handleError()
@@ -45,10 +46,16 @@ final class PokemonTableViewController: UITableViewController {
         }
     }
     
+    private func handleEmptyList(){
+        if self.pokemonTableViewData.count > 0 { return }
+        let emptyMsg = UIAlertController(title: "Oops", errorMessage: "Sounds like pokémon of this type are yet to be discovered!\nGotta catch 'em all!")
+        self.present(emptyMsg, animated: true, completion: nil)
+    }
+    
     private func handleError(){
         DispatchQueue.main.async {
             self.loadSpinner.stopAnimating()
-            let errorMsg = UIAlertController(errorMessage: "Oops, It seems we lost our pokémons! Check your Pokenet connection.")
+            let errorMsg = UIAlertController(title: "Error", errorMessage: "It seems we lost our pokémons! Check your Pokenet connection.")
             self.present(errorMsg, animated: true, completion: nil)
         }
     }
