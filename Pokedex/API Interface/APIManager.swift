@@ -9,10 +9,9 @@
 import Foundation
 
 
-final class APIManager {
+final class APIManager: APIManagerProtocol{
     
     private let apiBaseUrl = "https://pokeapi.co/api/v2"
-    
     private let session: NetworkSession
     
     init(session: NetworkSession = URLSession.shared){
@@ -51,7 +50,7 @@ final class APIManager {
         
         guard let requestUrl = URL(string:url) else { return }
         
-        self.session.loadData(requestUrl: requestUrl, completionHandler: { (data, response, error) -> Void in
+        self.session.loadData(requestUrl: requestUrl, completionHandler: { (data, _, error) -> Void in
             if let error = error {
                 completion(.failure(error))
             }
@@ -77,7 +76,7 @@ final class APIManager {
         
         guard let requestUrl = URL(string: url) else { return }
         
-        self.session.loadData(requestUrl: requestUrl, completionHandler: { (data, response, error) -> Void in
+        self.session.loadData(requestUrl: requestUrl, completionHandler: { (data, _, error) -> Void in
             
             if let error = error {
                 completion(.failure(error))

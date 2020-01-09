@@ -10,8 +10,12 @@ import Foundation
 
 final class PokedexViewModel {
 
-    let apiManager = APIManager()
+    private var apiManager: APIManagerProtocol
     private let definedCellHeight = 50.0
+    
+    init(apiManager: APIManagerProtocol = APIManager()) {
+        self.apiManager = apiManager
+    }
     
     func retrievePokeTypes(completion: @escaping (Result<[PokeTypeUrl], Error>) -> Void){
         
