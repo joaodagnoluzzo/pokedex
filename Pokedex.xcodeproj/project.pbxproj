@@ -12,6 +12,8 @@
 		CFAAD9E823B4C9FA0054196D /* PokemonDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAAD9E723B4C9FA0054196D /* PokemonDetailsViewController.swift */; };
 		CFAAD9EA23B4D3250054196D /* UIExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAAD9E923B4D3250054196D /* UIExtensions.swift */; };
 		CFAAD9EC23B4F4330054196D /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAAD9EB23B4F4330054196D /* StringExtensions.swift */; };
+		CFB15CA123C760BF0059CB31 /* NetworkSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB15CA023C760BF0059CB31 /* NetworkSession.swift */; };
+		CFB15CA323C7625E0059CB31 /* URLSessionExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB15CA223C7625E0059CB31 /* URLSessionExtensions.swift */; };
 		CFB6707A23B1537200F33E80 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB6707923B1537200F33E80 /* AppDelegate.swift */; };
 		CFB6707C23B1537200F33E80 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB6707B23B1537200F33E80 /* SceneDelegate.swift */; };
 		CFB6708123B1537200F33E80 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CFB6707F23B1537200F33E80 /* Main.storyboard */; };
@@ -44,6 +46,8 @@
 		CFAAD9E723B4C9FA0054196D /* PokemonDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDetailsViewController.swift; sourceTree = "<group>"; };
 		CFAAD9E923B4D3250054196D /* UIExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIExtensions.swift; sourceTree = "<group>"; };
 		CFAAD9EB23B4F4330054196D /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
+		CFB15CA023C760BF0059CB31 /* NetworkSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkSession.swift; sourceTree = "<group>"; };
+		CFB15CA223C7625E0059CB31 /* URLSessionExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionExtensions.swift; sourceTree = "<group>"; };
 		CFB6707623B1537200F33E80 /* Pokedex.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pokedex.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CFB6707923B1537200F33E80 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CFB6707B23B1537200F33E80 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -107,6 +111,7 @@
 			children = (
 				CFAAD9E923B4D3250054196D /* UIExtensions.swift */,
 				CFAAD9EB23B4F4330054196D /* StringExtensions.swift */,
+				CFB15CA223C7625E0059CB31 /* URLSessionExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -117,6 +122,14 @@
 				CFEBCC4023B2271A004E0F73 /* APIManager.swift */,
 			);
 			path = "API Interface";
+			sourceTree = "<group>";
+		};
+		CFB15C9F23C7608E0059CB31 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				CFB15CA023C760BF0059CB31 /* NetworkSession.swift */,
+			);
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 		CFB6706D23B1537200F33E80 = {
@@ -143,6 +156,7 @@
 				CF1E767823B52B7300CB539F /* Fonts */,
 				CFAAD9EF23B51D180054196D /* API Interface */,
 				CFAAD9EE23B51CFA0054196D /* Extensions */,
+				CFB15C9F23C7608E0059CB31 /* Protocols */,
 				CFAAD9ED23B51CE10054196D /* View Controllers */,
 				CFEBCC3F23B15DB0004E0F73 /* Delegates */,
 				CFEBCC2F23B154FD004E0F73 /* Model */,
@@ -288,11 +302,13 @@
 			files = (
 				CFF3928B23B62DA100B5B453 /* LoadSpinnerViewController.swift in Sources */,
 				CFAAD9EC23B4F4330054196D /* StringExtensions.swift in Sources */,
+				CFB15CA323C7625E0059CB31 /* URLSessionExtensions.swift in Sources */,
 				CFEBCC4323B24702004E0F73 /* PokemonTableViewController.swift in Sources */,
 				CFAAD9E823B4C9FA0054196D /* PokemonDetailsViewController.swift in Sources */,
 				CFEBCC4123B2271A004E0F73 /* APIManager.swift in Sources */,
 				CFEBCC3723B1553F004E0F73 /* PokeTypesTableViewController.swift in Sources */,
 				CFEBCC3423B15522004E0F73 /* Pokemon.swift in Sources */,
+				CFB15CA123C760BF0059CB31 /* NetworkSession.swift in Sources */,
 				CFAAD9EA23B4D3250054196D /* UIExtensions.swift in Sources */,
 				CFB6707A23B1537200F33E80 /* AppDelegate.swift in Sources */,
 				CFB6707C23B1537200F33E80 /* SceneDelegate.swift in Sources */,

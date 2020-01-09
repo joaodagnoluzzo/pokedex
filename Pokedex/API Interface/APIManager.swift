@@ -13,12 +13,18 @@ final class APIManager {
     
     private let apiBaseUrl = "https://pokeapi.co/api/v2"
     
+    private let session: NetworkSession
+    
+    init(session: NetworkSession = URLSession.shared){
+        self.session = session
+    }
+    
     func fetchPokeTypes(completion: @escaping (Result<PokeType, Error>)-> Void) {
               
         let requestHttp = "\(apiBaseUrl)/type/"
         guard let requestURL = URL(string: requestHttp) else { return }
         
-        let task = URLSession.shared.dataTask(with: requestURL, completionHandler: { (data, response, error) -> Void in
+        self.session.loadData(requestUrl: requestURL, completionHandler: { (data, response, error) -> Void in
           
             if let error = error {
                 completion(.failure(error))
@@ -28,7 +34,6 @@ final class APIManager {
                 completion(.success(self.decodePokeType(data: data)))
             }
         })
-        task.resume()
     }
     
     private func decodePokeType(data: Data) -> PokeType{
@@ -46,8 +51,7 @@ final class APIManager {
         
         guard let requestUrl = URL(string:url) else { return }
         
-        let task = URLSession.shared.dataTask(with: requestUrl, completionHandler: { (data, response, error) -> Void in
-            
+        self.session.loadData(requestUrl: requestUrl, completionHandler: { (data, response, error) -> Void in
             if let error = error {
                 completion(.failure(error))
             }
@@ -56,7 +60,6 @@ final class APIManager {
                 completion(.success(self.decodePokeTypeDetails(data: data)))
             }
         })
-        task.resume()
     }
     
     private func decodePokeTypeDetails(data: Data) -> PokeTypeDetail {
@@ -74,7 +77,7 @@ final class APIManager {
         
         guard let requestUrl = URL(string: url) else { return }
         
-        let task = URLSession.shared.dataTask(with: requestUrl, completionHandler: { (data, response, error) -> Void in
+        self.session.loadData(requestUrl: requestUrl, completionHandler: { (data, response, error) -> Void in
             
             if let error = error {
                 completion(.failure(error))
@@ -84,7 +87,6 @@ final class APIManager {
                 completion(.success(self.decodePokemonDetails(data: data)))
             }
         })
-        task.resume()
     }
     
     private func decodePokemonDetails(data: Data) -> Pokemon {
