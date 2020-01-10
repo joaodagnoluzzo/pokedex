@@ -13,7 +13,7 @@ final class APIManagerMock : APIManagerProtocol{
     var pokeType: PokeType?
     var pokeTypeDetail: PokeTypeDetail?
     var pokemon: Pokemon?
-    var error: Error = NSError(domain: "",code: 0, userInfo: nil)
+    var error: Error = NSError(domain: "APIManagerMock",code: 0, userInfo: nil)
     
     func fetchPokeTypes(completion: @escaping (Result<PokeType, Error>) -> Void) {
     
