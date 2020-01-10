@@ -72,5 +72,30 @@ class PokedexViewModelTests: XCTestCase {
         XCTAssertNotNil(data)
         XCTAssertEqual(data?.count, 0, "Pokemon list should be empty for Fire type")
     }
+    
+    func testEmptyPokemonDetails(){
+        
+        var data: Pokemon?
+        var error: Error?
+        
+        let promise = expectation(description: "No pokémon is retrieved")
+        self.apiManager.pokemon = Pokemon()
+        
+        sut = PokedexViewModel(apiManager: apiManager)
+        sut.retrievePokemonDetails(pokemonUrl: "", completion: { (results) in
+            switch results {
+            case .success(let pokemon):
+                data = pokemon
+            case .failure(let responseError):
+                error = responseError
+            }
+            promise.fulfill()
+        })
+        
+        wait(for: [promise], timeout: 4.0)
+        XCTAssertNil(error)
+        XCTAssertNotNil(data)
+        XCTAssertEqual(data?.name, "", "Pokémon detail should not contain a name")
+    }
 
 }
