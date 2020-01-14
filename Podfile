@@ -10,6 +10,7 @@ target 'Pokedex' do
   def testing_pods 
   	pod 'Quick'
   	pod 'Nimble'
+  	pod 'Swinject'
   end
 
   target 'PokedexTests' do
