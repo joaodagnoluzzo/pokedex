@@ -13,11 +13,22 @@ target 'Pokedex' do
   	pod 'Swinject'
   end
 
+  def ui_testing_pods
+    pod 'Quick'
+    pod 'Nimble'
+  end
+
   target 'PokedexTests' do
     inherit! :search_paths
     # Pods for testing
 	testing_pods
   end
+
+  target 'PokedexUITests' do
+    # Pods for UI testing
+    ui_testing_pods
+  end
+
 
 
 
