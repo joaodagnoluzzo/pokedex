@@ -39,7 +39,7 @@ final class PokeTypeTableViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
-//        self.loadSpinner.setupTableViewIndicator(view: self.tableView)
+        self.loadSpinner.setupTableViewIndicator(view: self.tableView)
         self.retrieveData()
     }
     
@@ -70,14 +70,6 @@ final class PokeTypeTableViewController: UIViewController {
             self.loadSpinner.stopAnimating()
             let errorMsg = UIAlertController(title: "Error", errorMessage: "PokeTypes not found! Check your Pokenet connection.")
             self.present(errorMsg, animated: true, completion: nil)
-        }
-    }
-        
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if (segue.identifier == "pokemonListSegue"){
-            guard let destinationViewController = segue.destination as? PokemonTableViewController else { return }
-            guard let index = self.tableView.indexPathForSelectedRow?.row else { return }
-            destinationViewController.type = self.tableViewData[index]
         }
     }
     

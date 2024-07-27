@@ -17,8 +17,6 @@ final class PokemonTableViewController: UIViewController {
     var type: PokeTypeUrl?
     private var pokemonTableViewData = [PokeUrl]()
     private let viewModel = PokemonViewModel()
-    private var loadSpinner = UIActivityIndicatorView(style: .large)
-    
     
     init(type: PokeTypeUrl? = PokeTypeUrl(name: "Fire", url: "https://pokeapi.co/api/v2/type/1/")) {
         super.init(nibName: nil, bundle: nil)
@@ -49,7 +47,6 @@ final class PokemonTableViewController: UIViewController {
         setupTableView()
         
         self.setTitle(pokeType: type)
-//        self.loadSpinner.setupTableViewIndicator(view: self.view)
         self.retrieveData(pokeType: type)
     }
     
@@ -60,13 +57,13 @@ final class PokemonTableViewController: UIViewController {
     
     private func retrieveData(pokeType: PokeTypeUrl?){
         guard let type = type else { return }
-        self.loadSpinner.startAnimating()
+        self.tableView.startLoading()
         self.viewModel.retrievePokemonList(typeUrl: type.url) { [weak self] (results) in
             switch results {
             case .success(let data):
                 self?.pokemonTableViewData = data
                 DispatchQueue.main.async {
-                    self?.loadSpinner.stopAnimating()
+                    self?.tableView.stopLoading()
                     self?.tableView.reloadData()
                     self?.handleEmptyList()
                 }
@@ -84,20 +81,11 @@ final class PokemonTableViewController: UIViewController {
     
     private func handleError(){
         DispatchQueue.main.async {
-            self.loadSpinner.stopAnimating()
+            self.tableView.stopLoading()
             let errorMsg = UIAlertController(title: "Error", errorMessage: "It seems we lost our pokémons! Check your Pokenet connection.")
             self.present(errorMsg, animated: true, completion: nil)
         }
     }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if (segue.identifier == "pokemonDetailSegue"){
-            guard let destinationViewController = segue.destination as? PokemonDetailsViewController else { return }
-            guard let index = self.tableView.indexPathForSelectedRow?.row else { return }
-            destinationViewController.pokemonUrl = self.pokemonTableViewData[index]
-        }
-    }
-
 }
 
 
@@ -109,13 +97,14 @@ extension PokemonTableViewController: UITableViewDataSource {
         }
         
         let item = pokemonTableViewData[indexPath.row]
-        cell.textLabel?.text = item.name
-
+        cell.configure(with: item.name)
+        
         return cell
     }
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let detailsViewController = PokemonDetailsViewController(pokemon: pokemonTableViewData[indexPath.row])
+        navigationController?.pushViewController(detailsViewController, animated: true)
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

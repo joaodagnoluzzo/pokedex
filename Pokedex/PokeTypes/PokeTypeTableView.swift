@@ -17,10 +17,5 @@ class PokeTypeTableView: UITableView {
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        setupView()
-    }
-    
-    func setupView() {
-        print("debug table view")
     }
 }

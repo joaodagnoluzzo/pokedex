@@ -15,7 +15,7 @@ class GenericTableViewCell: UITableViewCell {
     
     private let label: UILabel = {
         let label = UILabel()
-        label.font = UIFont.customFont(style: .body, size: 17)
+        label.font = UIFont.customBodyFont(size: 17)
         label.numberOfLines = 0
         return label
     }()
@@ -34,8 +34,7 @@ class GenericTableViewCell: UITableViewCell {
         contentView.addSubview(label)
         
         setupLabel()
-        
-        configureWithPokeballColors()
+        configureStyling()
     }
     
     func configure(with text: String) {
@@ -55,19 +54,8 @@ class GenericTableViewCell: UITableViewCell {
         ])
     }
     
-    func configureWithPokeballColors() {
+    func configureStyling() {
         self.textLabel?.textColor = UIColor(hex: "#222224")
         self.backgroundColor = UIColor(hex: "#f0f0f0")
-    }
-}
-
-extension UIFont {
-    
-    static func customFont(style: UIFont.TextStyle, size: CGFloat) -> UIFont {
-        if let customFont = UIFont(name: "PokemonGB", size: size) {
-            return UIFontMetrics(forTextStyle: style).scaledFont(for: customFont)
-        } else {
-            return UIFont()
-        }
     }
 }

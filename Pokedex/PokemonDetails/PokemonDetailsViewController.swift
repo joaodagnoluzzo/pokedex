@@ -16,15 +16,32 @@ final class PokemonDetailsViewController: UIViewController {
     @IBOutlet weak var pokemonAbilitiesTextView: UITextView?
     @IBOutlet weak var pokemonShareButton: UIBarButtonItem?
     
+    
+    let detailsView = PokemonDetailsView()
     var pokemonUrl: PokeUrl?
     
     private let viewModel = PokemonDetailsViewModel()
     private var loadSpinnerView = LoadSpinnerViewController()
     
+    override func loadView() {
+        view = detailsView
+    }
+    
+    init(pokemon: PokeUrl? = PokeUrl(name: "", url: "")) {
+        super.init(nibName: nil, bundle: nil)
+        self.pokemonUrl = pokemon
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.setTitle(pokemonUrl: pokemonUrl)
         self.retrieveData(pokemonUrl: pokemonUrl)
+        
     }
     
     private func setupLoadingScreen(){
@@ -39,16 +56,6 @@ final class PokemonDetailsViewController: UIViewController {
             self.loadSpinnerView.removeFromParent()
             self.pokemonShareButton?.isEnabled = true
         }
-    }
-    
-    private func setTextViewStyle(){
-        let style = NSMutableParagraphStyle()
-        style.lineSpacing = 20
-        guard let font = UIFont(name: "PokemonGB", size: 17) else { return }
-        let attributes = [NSAttributedString.Key.paragraphStyle: style, NSAttributedString.Key.font: font]
-        guard let textView = self.pokemonAbilitiesTextView else { return }
-        guard let currentText = self.pokemonAbilitiesTextView!.text else { return }
-        textView.attributedText = NSAttributedString(string: currentText, attributes:attributes)
     }
     
     private func setTitle(pokemonUrl: PokeUrl?){
@@ -88,15 +95,17 @@ final class PokemonDetailsViewController: UIViewController {
     private func setupViews(pokemon: PokemonModel){
         
         DispatchQueue.main.async {
-            self.setPokemonHeight(height: pokemon.height)
-            self.setPokemonWeight(weight: pokemon.weight)
-            self.setPokemonAbilities(abilities: pokemon.abilities)
+            let formattedHeight = pokemon.height.toFormattedHeight()
+            let formattedWeight = pokemon.weight.toFormattedWeight()
+            let formattedAbilities = self.formatAbilities(pokemon.abilities)
+            
+            self.detailsView.configure(formattedHeight, formattedWeight, formattedAbilities)
             self.removeLoadingScreen()
         }
         
         self.setPokemonImage(url: pokemon.sprites.frontDefault) { [weak self] image in
             DispatchQueue.main.async {
-                self?.pokemonImageView?.image = image
+                self?.detailsView.configure(with: image)
             }
         }
     }
@@ -108,20 +117,7 @@ final class PokemonDetailsViewController: UIViewController {
         })
     }
     
-    private func setPokemonHeight(height: Int){
-        self.pokemonHeightLabel?.text = height.toFormattedHeight()
-    }
-    
-    private func setPokemonWeight(weight: Int){
-        self.pokemonWeightLabel?.text = weight.toFormattedWeight()
-    }
-    
-    private func setPokemonAbilities(abilities: [Abilities]){
-        self.pokemonAbilitiesTextView?.text = self.formatAbilities(abilities: abilities)
-        self.setTextViewStyle()
-    }
-    
-    private func formatAbilities(abilities: [Abilities]) -> String {
+    private func formatAbilities(_ abilities: [Abilities]) -> String {
         //TODO: Verificar a possibilidade de melhorar esse trecho
         var formattedText = ""
         for item in abilities {
