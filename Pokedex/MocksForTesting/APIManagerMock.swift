@@ -10,6 +10,8 @@ import Foundation
 
 final class APIManagerMock : APIManagerProtocol{
     
+    
+    
     var pokeType: PokeTypeModel?
     var pokeTypeDetail: PokemonDetailsModel?
     var pokemon: PokemonModel?
@@ -41,4 +43,7 @@ final class APIManagerMock : APIManagerProtocol{
         }
     }
     
+    func fetchData(from url: String, completion: @escaping (Data?) -> Void) {
+        //Not implemented yet
+    }
 }

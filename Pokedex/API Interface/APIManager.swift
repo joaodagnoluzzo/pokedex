@@ -99,4 +99,15 @@ final class APIManager: APIManagerProtocol {
         return pokemon
     }
     
+    func fetchData(from url: String, completion: @escaping (Data?) -> Void) {
+        guard let urlRequest = URL(string: url) else { return }
+        
+        self.session.loadData(requestUrl: urlRequest) { data, _, error in
+            guard let data = data, error == nil else {
+                completion(nil)
+                return
+            }
+            completion(data)
+        }
+    }
 }

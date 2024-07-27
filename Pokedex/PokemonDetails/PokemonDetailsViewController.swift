@@ -86,28 +86,34 @@ final class PokemonDetailsViewController: UIViewController {
     }
     
     private func setupViews(pokemon: PokemonModel){
-        self.setPokemonImage(url: pokemon.sprites.frontDefault)
+        
         DispatchQueue.main.async {
             self.setPokemonHeight(height: pokemon.height)
             self.setPokemonWeight(weight: pokemon.weight)
             self.setPokemonAbilities(abilities: pokemon.abilities)
             self.removeLoadingScreen()
         }
+        
+        self.setPokemonImage(url: pokemon.sprites.frontDefault) { [weak self] image in
+            DispatchQueue.main.async {
+                self?.pokemonImageView?.image = image
+            }
+        }
     }
     
-    private func setPokemonImage(url: String){
-        guard let url = URL(string: url) else { return }
-        self.pokemonImageView?.load(url:url)
+    private func setPokemonImage(url: String, completionHandler: @escaping (UIImage) -> Void){
+        self.viewModel.retrievePokemonImage(imageUrl: url, completion: { image in
+            guard let image = image else { return }
+            completionHandler(image)
+        })
     }
     
     private func setPokemonHeight(height: Int){
-        let formattedHeight = String(format: "%.1f m", Double(height) * 0.1)
-        self.pokemonHeightLabel?.text = formattedHeight
+        self.pokemonHeightLabel?.text = height.toFormattedHeight()
     }
     
     private func setPokemonWeight(weight: Int){
-        let formattedWeight = String(format: "%.1f Kg", Double(weight) * 0.1)
-        self.pokemonWeightLabel?.text = formattedWeight
+        self.pokemonWeightLabel?.text = weight.toFormattedWeight()
     }
     
     private func setPokemonAbilities(abilities: [Abilities]){
@@ -135,21 +141,5 @@ final class PokemonDetailsViewController: UIViewController {
         let shareViewController = UIActivityViewController(activityItems: [shareInfo], applicationActivities: [])
         shareViewController.excludedActivityTypes = [.airDrop, .addToReadingList, .assignToContact, .markupAsPDF, .saveToCameraRoll]
         self.present(shareViewController, animated: true, completion: nil)
-    }
-}
-
-
-//MARK: - Extensions
-
-private extension Int {
-    
-    private var conversionFactor: Double { 0.1 }
-    
-    func toFormattedWeight() -> String {
-        return String(format: "%.1f Kg", Double(self) * conversionFactor)
-    }
-    
-    func toFormattedHeight() -> String {
-        return String(format: "%.1f m", Double(self) * conversionFactor)
     }
 }

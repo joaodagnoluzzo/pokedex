@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct PokemonDetailsModel: Decodable{
+struct PokemonDetailsModel: Decodable {
     let name: String
     let pokemon: [PokemonPreview]
 }
@@ -20,7 +20,7 @@ extension PokemonDetailsModel {
     }
 }
 
-struct PokemonPreview: Decodable{
+struct PokemonPreview: Decodable {
     let pokemon: PokeUrl
 }
 

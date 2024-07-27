@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class PokemonDetailsViewModel {
     
@@ -25,6 +26,15 @@ class PokemonDetailsViewModel {
             case .failure(let error):
                 completion(.failure(error))
             }
+        }
+    }
+    
+    func retrievePokemonImage(imageUrl: String, completion: @escaping (UIImage?) -> Void) {
+    
+        self.apiManager.fetchData(from: imageUrl) { data in
+            guard let data = data else { return }
+            
+            completion(UIImage(data: data))
         }
     }
     

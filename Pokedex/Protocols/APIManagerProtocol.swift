@@ -13,4 +13,5 @@ protocol APIManagerProtocol {
     func fetchPokeTypes(completion: @escaping (Result<PokeTypeModel, Error>)-> Void)
     func fetchPokemonsForType(url: String, completion: @escaping (Result<PokemonDetailsModel, Error>)-> Void)
     func fetchPokemonDetails(url: String, completion: @escaping (Result<PokemonModel, Error>) -> Void)
+    func fetchData(from url: String, completion: @escaping (Data?) -> Void)
 }
