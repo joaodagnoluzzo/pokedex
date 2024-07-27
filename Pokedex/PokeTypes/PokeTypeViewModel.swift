@@ -9,7 +9,7 @@
 import Foundation
 
 
-class PokeTypesViewModel {
+class PokeTypeViewModel {
 
     private var apiManager: APIManagerProtocol
     

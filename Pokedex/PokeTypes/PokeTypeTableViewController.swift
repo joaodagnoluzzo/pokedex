@@ -8,11 +8,29 @@
 
 import UIKit
 
-final class PokeTypesTableViewController: UITableViewController {
+final class PokeTypeTableViewController: UIViewController {
 
     private var tableViewData = [PokeTypeUrl]()
-    private let viewModel = PokeTypesViewModel()
+    private let viewModel = PokeTypeViewModel()
     private var loadSpinner = UIActivityIndicatorView(style: .large)
+    
+    
+    private var tableView = PokeTypeTableView()
+    private var myCell = GenericTableViewCell()
+    
+    func setupTableView() {
+        view.addSubview(tableView)
+        
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        
+        
+        tableView.register(GenericTableViewCell.self, forCellReuseIdentifier: GenericTableViewCell.identifier)
+        tableView.dataSource = self
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -20,7 +38,8 @@ final class PokeTypesTableViewController: UITableViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.loadSpinner.setupTableViewIndicator(view: self.view)
+        setupTableView()
+//        self.loadSpinner.setupTableViewIndicator(view: self.tableView)
         self.retrieveData()
     }
     
@@ -32,8 +51,8 @@ final class PokeTypesTableViewController: UITableViewController {
     
     private func retrieveData(){
         self.loadSpinner.startAnimating()
-        viewModel.retrievePokeTypes { (results) in
-            switch results {
+        viewModel.retrievePokeTypes { (result) in
+            switch result {
             case .success(let data):
                 self.tableViewData = data
                 DispatchQueue.main.async {
@@ -53,27 +72,7 @@ final class PokeTypesTableViewController: UITableViewController {
             self.present(errorMsg, animated: true, completion: nil)
         }
     }
-    
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tableViewData.count
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return CGFloat(50.0)
-    }
-   
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "pokeTypeCell", for: indexPath)
-        cell.textLabel?.text = self.tableViewData[indexPath.row].name
-        cell.configureWithPokeballColors()
-        cell.configureWithPokemonFont()
-        return cell
-    }
-    
+        
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "pokemonListSegue"){
             guard let destinationViewController = segue.destination as? PokemonTableViewController else { return }
@@ -84,5 +83,29 @@ final class PokeTypesTableViewController: UITableViewController {
     
     public func setupStrokeAttributes(font: UIFont, strokeWidth: Float, insideColor: UIColor, strokeColor: UIColor) -> [NSAttributedString.Key: Any]{
         return [NSAttributedString.Key.strokeColor : strokeColor, NSAttributedString.Key.foregroundColor : insideColor, NSAttributedString.Key.strokeWidth : -strokeWidth, NSAttributedString.Key.font : font]
+    }
+}
+
+
+extension PokeTypeTableViewController: UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return tableViewData.count
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return CGFloat(50.0)
+    }
+   
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: GenericTableViewCell.identifier, for: indexPath) as? GenericTableViewCell else {
+            return UITableViewCell()
+        }
+        
+        let item = tableViewData[indexPath.row]
+        cell.configure(with: item.name)
+
+        return cell
     }
 }
