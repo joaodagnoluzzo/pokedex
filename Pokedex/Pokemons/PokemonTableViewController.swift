@@ -75,8 +75,8 @@ final class PokemonTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "pokemonListCell", for: indexPath)
         cell.textLabel?.text = self.pokemonTableViewData[indexPath.row].name
-        cell.configureWithPokeballColors()
-        cell.configureWithPokemonFont()
+//        cell.configureWithPokeballColors()
+//        cell.configureWithPokemonFont()
         return cell
     }
     

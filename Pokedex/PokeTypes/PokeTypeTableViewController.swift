@@ -30,6 +30,7 @@ final class PokeTypeTableViewController: UIViewController {
         
         tableView.register(GenericTableViewCell.self, forCellReuseIdentifier: GenericTableViewCell.identifier)
         tableView.dataSource = self
+        tableView.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -93,10 +94,7 @@ extension PokeTypeTableViewController: UITableViewDataSource {
         return tableViewData.count
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return CGFloat(50.0)
-    }
-   
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: GenericTableViewCell.identifier, for: indexPath) as? GenericTableViewCell else {
@@ -108,4 +106,12 @@ extension PokeTypeTableViewController: UITableViewDataSource {
 
         return cell
     }
+}
+
+extension PokeTypeTableViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return CGFloat(50)
+    }
+    
 }
