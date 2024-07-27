@@ -1,5 +1,5 @@
 //
-//  Pokemon.swift
+//  PokemonModel.swift
 //  Pokedex
 //
 //  Created by João Pedro Cappelletto D'Agnoluzzo on 23/12/19.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Pokemon: Decodable {
+struct PokemonModel: Decodable {
     
     let abilities: [Abilities]
     let name: String
@@ -17,7 +17,7 @@ struct Pokemon: Decodable {
     let height: Int
 }
 
-extension Pokemon {
+extension PokemonModel {
     init() {
         abilities = []
         name = ""

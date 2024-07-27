@@ -10,12 +10,12 @@ import Foundation
 
 final class APIManagerMock : APIManagerProtocol{
     
-    var pokeType: PokeType?
-    var pokeTypeDetail: PokeTypeDetail?
-    var pokemon: Pokemon?
+    var pokeType: PokeTypeModel?
+    var pokeTypeDetail: PokemonDetailsModel?
+    var pokemon: PokemonModel?
     var error: Error = NSError(domain: "APIManagerMock",code: 0, userInfo: nil)
     
-    func fetchPokeTypes(completion: @escaping (Result<PokeType, Error>) -> Void) {
+    func fetchPokeTypes(completion: @escaping (Result<PokeTypeModel, Error>) -> Void) {
     
         if let pokeType = pokeType {
             completion(.success(pokeType))
@@ -24,7 +24,7 @@ final class APIManagerMock : APIManagerProtocol{
         }
     }
     
-    func fetchPokemonsForType(url: String, completion: @escaping (Result<PokeTypeDetail, Error>) -> Void) {
+    func fetchPokemonsForType(url: String, completion: @escaping (Result<PokemonDetailsModel, Error>) -> Void) {
         
         if let pokeTypeDetail = pokeTypeDetail {
             completion(.success(pokeTypeDetail))
@@ -33,7 +33,7 @@ final class APIManagerMock : APIManagerProtocol{
         }
     }
     
-    func fetchPokemonDetails(url: String, completion: @escaping (Result<Pokemon, Error>) -> Void) {
+    func fetchPokemonDetails(url: String, completion: @escaping (Result<PokemonModel, Error>) -> Void) {
         if let pokemon = pokemon {
             completion(.success(pokemon))
         } else {

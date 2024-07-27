@@ -9,16 +9,16 @@
 import Foundation
 
 
-final class APIManager: APIManagerProtocol{
+final class APIManager: APIManagerProtocol {
     
     private let apiBaseUrl = "https://pokeapi.co/api/v2"
     private let session: NetworkSession
     
-    init(session: NetworkSession = URLSession.shared){
+    init(session: NetworkSession = URLSession.shared) {
         self.session = session
     }
     
-    func fetchPokeTypes(completion: @escaping (Result<PokeType, Error>)-> Void) {
+    func fetchPokeTypes(completion: @escaping (Result<PokeTypeModel, Error>)-> Void) {
               
         let requestHttp = "\(apiBaseUrl)/type/"
         guard let requestURL = URL(string: requestHttp) else { return }
@@ -35,10 +35,10 @@ final class APIManager: APIManagerProtocol{
         })
     }
     
-    private func decodePokeType(data: Data) -> PokeType{
-        var pokeTypes = PokeType()
+    private func decodePokeType(data: Data) -> PokeTypeModel{
+        var pokeTypes = PokeTypeModel()
         do {
-            let result = try JSONDecoder().decode(PokeType.self, from: data)
+            let result = try JSONDecoder().decode(PokeTypeModel.self, from: data)
             pokeTypes = result
         } catch {
             print("JSON Decoding Error: \(error)")
@@ -46,7 +46,7 @@ final class APIManager: APIManagerProtocol{
         return pokeTypes
     }
     
-    func fetchPokemonsForType(url: String, completion: @escaping (Result<PokeTypeDetail, Error>)-> Void){
+    func fetchPokemonsForType(url: String, completion: @escaping (Result<PokemonDetailsModel, Error>)-> Void){
         
         guard let requestUrl = URL(string:url) else { return }
         
@@ -61,10 +61,10 @@ final class APIManager: APIManagerProtocol{
         })
     }
     
-    private func decodePokeTypeDetails(data: Data) -> PokeTypeDetail {
-        var pokeTypeDetails = PokeTypeDetail()
+    private func decodePokeTypeDetails(data: Data) -> PokemonDetailsModel {
+        var pokeTypeDetails = PokemonDetailsModel()
         do {
-            let result = try JSONDecoder().decode(PokeTypeDetail.self, from: data)
+            let result = try JSONDecoder().decode(PokemonDetailsModel.self, from: data)
             pokeTypeDetails = result
         } catch {
             print("JSON Decoding Error: \(error)")
@@ -72,7 +72,7 @@ final class APIManager: APIManagerProtocol{
         return pokeTypeDetails
     }
    
-    func fetchPokemonDetails(url: String, completion: @escaping (Result<Pokemon, Error>) -> Void){
+    func fetchPokemonDetails(url: String, completion: @escaping (Result<PokemonModel, Error>) -> Void){
         
         guard let requestUrl = URL(string: url) else { return }
         
@@ -88,10 +88,10 @@ final class APIManager: APIManagerProtocol{
         })
     }
     
-    private func decodePokemonDetails(data: Data) -> Pokemon {
-        var pokemon = Pokemon()
+    private func decodePokemonDetails(data: Data) -> PokemonModel {
+        var pokemon = PokemonModel()
         do {
-            let result = try JSONDecoder().decode(Pokemon.self, from: data)
+            let result = try JSONDecoder().decode(PokemonModel.self, from: data)
             pokemon = result
         } catch {
             print("JSON Decoding Error: \(error)")

@@ -1,5 +1,5 @@
 //
-//  PokeType.swift
+//  PokeTypeModel.swift
 //  Pokedex
 //
 //  Created by João Pedro Cappelletto D'Agnoluzzo on 23/12/19.
@@ -8,12 +8,12 @@
 
 import Foundation
 
-struct PokeType: Decodable{
+struct PokeTypeModel: Decodable{
     let count: Int
     let results: [PokeTypeUrl]
 }
 
-extension PokeType {
+extension PokeTypeModel {
     init() {
         count = 0
         results = []

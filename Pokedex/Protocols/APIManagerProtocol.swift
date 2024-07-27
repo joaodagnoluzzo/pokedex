@@ -10,7 +10,7 @@ import Foundation
 
 protocol APIManagerProtocol {
     
-    func fetchPokeTypes(completion: @escaping (Result<PokeType, Error>)-> Void)
-    func fetchPokemonsForType(url: String, completion: @escaping (Result<PokeTypeDetail, Error>)-> Void)
-    func fetchPokemonDetails(url: String, completion: @escaping (Result<Pokemon, Error>) -> Void)
+    func fetchPokeTypes(completion: @escaping (Result<PokeTypeModel, Error>)-> Void)
+    func fetchPokemonsForType(url: String, completion: @escaping (Result<PokemonDetailsModel, Error>)-> Void)
+    func fetchPokemonDetails(url: String, completion: @escaping (Result<PokemonModel, Error>) -> Void)
 }

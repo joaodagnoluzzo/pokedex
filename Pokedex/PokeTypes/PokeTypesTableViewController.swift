@@ -11,7 +11,7 @@ import UIKit
 final class PokeTypesTableViewController: UITableViewController {
 
     private var tableViewData = [PokeTypeUrl]()
-    private let pokedexViewModel = PokedexViewModel()
+    private let viewModel = PokeTypesViewModel()
     private var loadSpinner = UIActivityIndicatorView(style: .large)
     
     override func viewWillAppear(_ animated: Bool) {
@@ -32,7 +32,7 @@ final class PokeTypesTableViewController: UITableViewController {
     
     private func retrieveData(){
         self.loadSpinner.startAnimating()
-        pokedexViewModel.retrievePokeTypes { (results) in
+        viewModel.retrievePokeTypes { (results) in
             switch results {
             case .success(let data):
                 self.tableViewData = data
@@ -63,7 +63,7 @@ final class PokeTypesTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return CGFloat(self.pokedexViewModel.getDefinedCellHeight())
+        return CGFloat(50.0)
     }
    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

@@ -29,7 +29,7 @@ class PokedexViewModelTests: XCTestCase {
         var data: [PokeTypeUrl]?
         var error: Error?
         let promise = expectation(description: "List of Poke Types is empty")
-        self.apiManager.pokeType = PokeType(count: 0, results: [])
+        self.apiManager.pokeType = PokeTypeModel(count: 0, results: [])
         
         sut = PokedexViewModel(apiManager: apiManager)
         sut.retrievePokeTypes{ (results) in
@@ -56,7 +56,7 @@ class PokedexViewModelTests: XCTestCase {
         let waterType = PokeTypeUrl(name: "Water", url: "https://pokeapi.co/water")
         let eletrictType = PokeTypeUrl(name: "Eletric", url: "https://pokeapi.co/eletric")
         
-        self.apiManager.pokeType = PokeType(count: 3, results: [fireType, waterType, eletrictType])
+        self.apiManager.pokeType = PokeTypeModel(count: 3, results: [fireType, waterType, eletrictType])
         
         sut = PokedexViewModel(apiManager: apiManager)
         sut.retrievePokeTypes(completion: { (results) in
@@ -101,7 +101,7 @@ class PokedexViewModelTests: XCTestCase {
         var error: Error?
         
         let promise = expectation(description: "Pokémon list is empty for Fire type")
-        self.apiManager.pokeTypeDetail = PokeTypeDetail(name: "Fire", pokemon: [])
+        self.apiManager.pokeTypeDetail = PokemonDetailsModel(name: "Fire", pokemon: [])
         
         sut = PokedexViewModel(apiManager: apiManager)
         sut.retrievePokemonList(typeUrl: "", completion: {(results) in
@@ -128,7 +128,7 @@ class PokedexViewModelTests: XCTestCase {
         let pokePreviewCharmander = PokemonPreview(pokemon: PokeUrl(name: "Charmander", url: "https://pokeapi.co/charmander"))
         let pokePreviewCharizard = PokemonPreview(pokemon: PokeUrl(name: "Charizard", url: "https://pokeapi.co/charizard"))
         
-        self.apiManager.pokeTypeDetail = PokeTypeDetail(name: "Fire", pokemon: [pokePreviewCharmander, pokePreviewCharizard])
+        self.apiManager.pokeTypeDetail = PokemonDetailsModel(name: "Fire", pokemon: [pokePreviewCharmander, pokePreviewCharizard])
         sut = PokedexViewModel(apiManager: apiManager)
         sut.retrievePokemonList(typeUrl: "", completion: { (results) in
             switch results {
@@ -147,11 +147,11 @@ class PokedexViewModelTests: XCTestCase {
     }
     
     func testEmptyPokemonDetails(){
-        var data: Pokemon?
+        var data: PokemonModel?
         var error: Error?
         
         let promise = expectation(description: "No pokémon is retrieved")
-        self.apiManager.pokemon = Pokemon()
+        self.apiManager.pokemon = PokemonModel()
         
         sut = PokedexViewModel(apiManager: apiManager)
         sut.retrievePokemonDetails(pokemonUrl: "", completion: { (results) in

@@ -14,7 +14,7 @@ import Swinject
 
 class PokedexViewModelSwinjectSpec: QuickSpec {
     
-    override func spec() {
+    override class func spec() {
         
         
         let container = Container()
@@ -28,22 +28,22 @@ class PokedexViewModelSwinjectSpec: QuickSpec {
             
             
             container.register(Sprites.self) { _ in .init(frontDefault: "https://pokeapi/pikachu_sprite.png")}
-            container.register(Pokemon.self) { resolver in
+            container.register(PokemonModel.self) { resolver in
                 let abilities = [Abilities(ability: Ability(name: "Ability 1", url: ""), is_hidden: false, slot: 1), Abilities(ability: Ability(name: "Ability 2", url: ""), is_hidden: false, slot: 2)]
                 let sprites = resolver.resolve(Sprites.self)!
                 
-                return Pokemon(abilities: abilities, name: "Pikachu", weight: 40, sprites: sprites, height: 6)
+                return PokemonModel(abilities: abilities, name: "Pikachu", weight: 40, sprites: sprites, height: 6)
             }
             
-            container.register(PokeType.self) { _ in
+            container.register(PokeTypeModel.self) { _ in
                 let types = [PokeTypeUrl(name: "Fire", url: ""), PokeTypeUrl(name: "Water", url: "")]
-                return PokeType(count: types.count, results: types)
+                return PokeTypeModel(count: types.count, results: types)
             }
             
-            container.register(PokeTypeDetail.self) { _ in
+            container.register(PokemonDetailsModel.self) { _ in
                 let pokePreviewCharmander = PokemonPreview(pokemon: PokeUrl(name: "Charmander", url: "https://pokeapi.co/charmander"))
                 let pokePreviewCharizard = PokemonPreview(pokemon: PokeUrl(name: "Charizard", url: "https://pokeapi.co/charizard"))
-                return PokeTypeDetail(name: "Fire", pokemon: [pokePreviewCharmander, pokePreviewCharizard])
+                return PokemonDetailsModel(name: "Fire", pokemon: [pokePreviewCharmander, pokePreviewCharizard])
             }
             
         }
@@ -58,7 +58,7 @@ class PokedexViewModelSwinjectSpec: QuickSpec {
             context("a list of pokemon types"){
                 it("should return all pokemon types"){
                     
-                    apiManager.pokeType = container.resolve(PokeType.self)
+                    apiManager.pokeType = container.resolve(PokeTypeModel.self)
                     
                     sut = PokedexViewModel(apiManager: apiManager)
                     
@@ -79,7 +79,7 @@ class PokedexViewModelSwinjectSpec: QuickSpec {
             context("a list of pokemons for a given type") {
                 it("should return all the pokemons of that type"){
                     
-                    apiManager.pokeTypeDetail = container.resolve(PokeTypeDetail.self)
+                    apiManager.pokeTypeDetail = container.resolve(PokemonDetailsModel.self)
                     sut = PokedexViewModel(apiManager: apiManager)
                     
                     waitUntil { (done) in
@@ -100,7 +100,7 @@ class PokedexViewModelSwinjectSpec: QuickSpec {
             context("details of a pokemon"){
                 it("should return its name, weight, height, sprites and abilities"){
                     
-                    apiManager.pokemon = container.resolve(Pokemon.self)
+                    apiManager.pokemon = container.resolve(PokemonModel.self)
                     sut = PokedexViewModel(apiManager: apiManager)
                     
                     waitUntil { (done) in
@@ -127,7 +127,7 @@ class PokedexViewModelSwinjectSpec: QuickSpec {
                 it("should return a formatted height"){
                     sut = PokedexViewModel()
                     var formatted: String
-                    formatted = sut.formatPokemonHeight(height: container.resolve(Pokemon.self)!.height)
+                    formatted = sut.formatPokemonHeight(height: container.resolve(PokemonModel.self)!.height)
                     
                     expect(formatted).to(equal("0.6 m"))
                 }
@@ -137,7 +137,7 @@ class PokedexViewModelSwinjectSpec: QuickSpec {
                 it("should return a formatted weight") {
                     sut = PokedexViewModel()
                     var formatted: String
-                    formatted = sut.formatPokemonWeight(weight: container.resolve(Pokemon.self)!.weight)
+                    formatted = sut.formatPokemonWeight(weight: container.resolve(PokemonModel.self)!.weight)
                     
                     expect(formatted).to(equal("4.0 Kg"))
                 }

@@ -1,5 +1,5 @@
 //
-//  PokeTypeDetail.swift
+//  PokemonDetailsModel.swift
 //  Pokedex
 //
 //  Created by João Pedro Cappelletto D'Agnoluzzo on 23/12/19.
@@ -8,12 +8,12 @@
 
 import Foundation
 
-struct PokeTypeDetail: Decodable{
+struct PokemonDetailsModel: Decodable{
     let name: String
     let pokemon: [PokemonPreview]
 }
 
-extension PokeTypeDetail {
+extension PokemonDetailsModel {
     init(){
         name = ""
         pokemon = []

@@ -13,7 +13,7 @@ final class PokemonTableViewController: UITableViewController {
     
     var type: PokeTypeUrl?
     private var pokemonTableViewData = [PokeUrl]()
-    private let pokedexViewModel = PokedexViewModel()
+    private let viewModel = PokemonViewModel()
     private var loadSpinner = UIActivityIndicatorView(style: .large)
     
     override func viewDidLoad() {
@@ -31,17 +31,17 @@ final class PokemonTableViewController: UITableViewController {
     private func retrieveData(pokeType: PokeTypeUrl?){
         guard let type = type else { return }
         self.loadSpinner.startAnimating()
-        self.pokedexViewModel.retrievePokemonList(typeUrl: type.url) { (results) in
+        self.viewModel.retrievePokemonList(typeUrl: type.url) { [weak self] (results) in
             switch results {
             case .success(let data):
-                self.pokemonTableViewData = data
+                self?.pokemonTableViewData = data
                 DispatchQueue.main.async {
-                    self.loadSpinner.stopAnimating()
-                    self.tableView.reloadData()
-                    self.handleEmptyList()
+                    self?.loadSpinner.stopAnimating()
+                    self?.tableView.reloadData()
+                    self?.handleEmptyList()
                 }
             case .failure(_):
-                self.handleError()
+                self?.handleError()
             }
         }
     }
@@ -69,7 +69,7 @@ final class PokemonTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return CGFloat(self.pokedexViewModel.getDefinedCellHeight())
+        return CGFloat(50.0)
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

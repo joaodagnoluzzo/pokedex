@@ -31,7 +31,7 @@ class ApiManagerTests: XCTestCase {
         self.networkSession.error = nil
         
         let promise = expectation(description: "Result count is zero")
-        var pokeType: PokeType?
+        var pokeType: PokeTypeModel?
         var error: Error?
         sut = APIManager(session: networkSession)
 

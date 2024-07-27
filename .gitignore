@@ -1,0 +1,77 @@
+# Xcode
+#
+# Xcode
+*.xcworkspace
+*.xcuserstate
+*.xcuserdatad
+*.xcuserdatad/*
+*.xcscheme
+*.xcschememanagement.plist
+*.xcodeproj/project.xcworkspace/
+*.xcodeproj/xcuserdata/
+*.xcodeproj/xcshareddata/
+*.xcodeproj/xcuserdata/
+*.xcodeproj/xcuserdata/*
+*.xcuserdatad/
+*.xcuserdatad/*
+
+# CocoaPods
+#
+Pods/
+Podfile.lock
+*.xcworkspace
+
+# Misc
+#
+*.swp
+*.swo
+.DS_Store
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.xcuserstate
+*.moved-aside
+*.xcuserdatad
+*.playground/
+*.playgroundbook/
+*.playgroundpage/
+
+# Archives
+*.xcarchive
+*.xcappdata
+
+# Device Logs
+*
+*.crash
+*.diag
+
+# Simulator
+*.app
+*.dSYM
+*.ipa
+*.dSYM.zip
+*.app.dSYM
+*.app.dSYM.zip
+
+# App Icon & Launch Screen
+*.xib
+*.storyboard
+*.png
+*.jpg
+*.jpeg
+
+# Xcode-related
+DerivedData/
+build/
+xcuserdata/
+*.xcuserstate
+*.xcworkspace/
+*.xcuserdatad/
+
+# Temporary Files
+*.tmp
+*.log
+*.pid
+*.swp
+*.swo

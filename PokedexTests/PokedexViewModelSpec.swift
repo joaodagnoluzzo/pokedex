@@ -13,7 +13,7 @@ import Nimble
 
 class PokedexViewModelSpec: QuickSpec {
     
-    override func spec() {
+    override class func spec() {
         
         var sut: PokedexViewModel!
         var apiManager: APIManagerMock!
@@ -32,7 +32,7 @@ class PokedexViewModelSpec: QuickSpec {
             context("a list of pokemon types"){
                 it("should return all pokemon types"){
                     
-                    apiManager.pokeType = PokeType(count: 2, results: [PokeTypeUrl(name: "Fire", url: ""), PokeTypeUrl(name: "Water", url: "")])
+                    apiManager.pokeType = PokeTypeModel(count: 2, results: [PokeTypeUrl(name: "Fire", url: ""), PokeTypeUrl(name: "Water", url: "")])
                     
                     sut = PokedexViewModel(apiManager: apiManager)
                     
@@ -56,7 +56,7 @@ class PokedexViewModelSpec: QuickSpec {
                     let pokePreviewCharmander = PokemonPreview(pokemon: PokeUrl(name: "Charmander", url: "https://pokeapi.co/charmander"))
                     let pokePreviewCharizard = PokemonPreview(pokemon: PokeUrl(name: "Charizard", url: "https://pokeapi.co/charizard"))
                     
-                    apiManager.pokeTypeDetail = PokeTypeDetail(name: "Fire", pokemon: [pokePreviewCharmander, pokePreviewCharizard])
+                    apiManager.pokeTypeDetail = PokemonDetailsModel(name: "Fire", pokemon: [pokePreviewCharmander, pokePreviewCharizard])
                     sut = PokedexViewModel(apiManager: apiManager)
                     
                     waitUntil { (done) in
@@ -79,7 +79,7 @@ class PokedexViewModelSpec: QuickSpec {
                     let abilities = [Abilities(ability: Ability(name: "Ability 1", url: ""), is_hidden: false, slot: 1), Abilities(ability: Ability(name: "Ability 2", url: ""), is_hidden: false, slot: 2)]
                     let sprites = Sprites(frontDefault: "https://pokeapi/pikachu_sprite.png")
                     
-                    apiManager.pokemon = Pokemon(abilities: abilities, name: "Pikachu", weight: 40, sprites: sprites, height: 60)
+                    apiManager.pokemon = PokemonModel(abilities: abilities, name: "Pikachu", weight: 40, sprites: sprites, height: 60)
                     sut = PokedexViewModel(apiManager: apiManager)
                     
                     waitUntil { (done) in

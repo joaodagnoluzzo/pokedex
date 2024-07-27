@@ -12,7 +12,7 @@ import Nimble
 
 class ShareInfoSpec: QuickSpec {
 
-    override func spec() {
+    override class func spec() {
         
         var app: XCUIApplication!
         

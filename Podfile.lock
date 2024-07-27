@@ -1,7 +1,17 @@
 PODS:
-  - Nimble (8.0.5)
-  - Quick (2.2.0)
-  - Swinject (2.7.1)
+  - CwlCatchException (2.2.0):
+    - CwlCatchExceptionSupport (~> 2.2.0)
+  - CwlCatchExceptionSupport (2.2.0)
+  - CwlMachBadInstructionHandler (2.2.0)
+  - CwlPosixPreconditionTesting (2.2.0)
+  - CwlPreconditionTesting (2.2.1):
+    - CwlCatchException (~> 2.2.0)
+    - CwlMachBadInstructionHandler (~> 2.2.0)
+    - CwlPosixPreconditionTesting (~> 2.2.0)
+  - Nimble (13.3.0):
+    - CwlPreconditionTesting (~> 2.2.0)
+  - Quick (7.6.2)
+  - Swinject (2.9.1)
 
 DEPENDENCIES:
   - Nimble
@@ -10,15 +20,25 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - CwlCatchException
+    - CwlCatchExceptionSupport
+    - CwlMachBadInstructionHandler
+    - CwlPosixPreconditionTesting
+    - CwlPreconditionTesting
     - Nimble
     - Quick
     - Swinject
 
 SPEC CHECKSUMS:
-  Nimble: 4ab1aeb9b45553c75b9687196b0fa0713170a332
-  Quick: 7fb19e13be07b5dfb3b90d4f9824c855a11af40e
-  Swinject: ddf78b8486dd9b71a667b852cad919ab4484478e
+  CwlCatchException: 51bf8319009a31104ea6f0568730d1ecc25b6454
+  CwlCatchExceptionSupport: 1345d6adb01a505933f2bc972dab60dcb9ce3e50
+  CwlMachBadInstructionHandler: ea1030428925d9bf340882522af30712fb4bf356
+  CwlPosixPreconditionTesting: a125dee731883f2582715f548c6b6c92c7fde145
+  CwlPreconditionTesting: ccfd08aca58d14e04062b2a3dd2fd52e09857453
+  Nimble: 3ac6c6b0b7e9835d1540b6507d8054b12a415536
+  Quick: b8bec97cd4b9f21da0472d45580f763b801fc353
+  Swinject: a827d508c6270da03ec74e558e728917a888fa9b
 
-PODFILE CHECKSUM: 06e8cf252a54e4c613b20e3688fb1b26fad5610b
+PODFILE CHECKSUM: 7cf3f74c738bdf7b45471d2467a3481795fd7afc
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.12.1

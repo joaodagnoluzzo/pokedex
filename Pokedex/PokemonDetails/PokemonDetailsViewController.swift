@@ -18,7 +18,7 @@ final class PokemonDetailsViewController: UIViewController {
     
     var pokemonUrl: PokeUrl?
     
-    private let pokedexViewModel = PokedexViewModel()
+    private let viewModel = PokemonDetailsViewModel()
     private var loadSpinnerView = LoadSpinnerViewController()
     
     override func viewDidLoad() {
@@ -59,7 +59,7 @@ final class PokemonDetailsViewController: UIViewController {
     private func retrieveData(pokemonUrl: PokeUrl?){
         guard let pokemonUrl = pokemonUrl else { return }
         self.setupLoadingScreen()
-        self.pokedexViewModel.retrievePokemonDetails(pokemonUrl: pokemonUrl.url) { (results) in
+        self.viewModel.retrievePokemonDetails(pokemonUrl: pokemonUrl.url) { (results) in
             switch results {
             case .success(let pokemon):
                 self.setupViews(pokemon: pokemon)
@@ -85,7 +85,7 @@ final class PokemonDetailsViewController: UIViewController {
         navController.popViewController(animated: true)
     }
     
-    private func setupViews(pokemon: Pokemon){
+    private func setupViews(pokemon: PokemonModel){
         self.setPokemonImage(url: pokemon.sprites.frontDefault)
         DispatchQueue.main.async {
             self.setPokemonHeight(height: pokemon.height)
@@ -101,22 +101,33 @@ final class PokemonDetailsViewController: UIViewController {
     }
     
     private func setPokemonHeight(height: Int){
-            self.pokemonHeightLabel?.text = self.pokedexViewModel.formatPokemonHeight(height: height)
+        let formattedHeight = String(format: "%.1f m", Double(height) * 0.1)
+        self.pokemonHeightLabel?.text = formattedHeight
     }
     
     private func setPokemonWeight(weight: Int){
-        self.pokemonWeightLabel?.text = self.pokedexViewModel.formatPokemonWeight(weight: weight)
+        let formattedWeight = String(format: "%.1f Kg", Double(weight) * 0.1)
+        self.pokemonWeightLabel?.text = formattedWeight
     }
     
     private func setPokemonAbilities(abilities: [Abilities]){
-            self.pokemonAbilitiesTextView?.text = self.pokedexViewModel.formatAbilities(abilities: abilities)
-            self.setTextViewStyle()
+        self.pokemonAbilitiesTextView?.text = self.formatAbilities(abilities: abilities)
+        self.setTextViewStyle()
+    }
+    
+    private func formatAbilities(abilities: [Abilities]) -> String {
+        //TODO: Verificar a possibilidade de melhorar esse trecho
+        var formattedText = ""
+        for item in abilities {
+            let formattedAbilityName = item.ability.name.toTitleCase()
+            formattedText += "\(formattedAbilityName)\n"
+        }
+        return formattedText
     }
     
     @IBAction func sharePokemonInfo(_ sender: Any) {
-        var shareInfo = ""
-        
-        shareInfo += "*\(self.title ?? "")*\n"
+        //TODO: Trocar de textView para label ao utilizar viewCode
+        var shareInfo = "*\(self.title ?? "")*\n"
         shareInfo += "Weight: \(self.pokemonWeightLabel?.text ?? "")\n"
         shareInfo += "Height: \(self.pokemonHeightLabel?.text ?? "")\n"
         shareInfo += "Abilities:\n\(self.pokemonAbilitiesTextView?.text ?? "")"
@@ -124,5 +135,21 @@ final class PokemonDetailsViewController: UIViewController {
         let shareViewController = UIActivityViewController(activityItems: [shareInfo], applicationActivities: [])
         shareViewController.excludedActivityTypes = [.airDrop, .addToReadingList, .assignToContact, .markupAsPDF, .saveToCameraRoll]
         self.present(shareViewController, animated: true, completion: nil)
+    }
+}
+
+
+//MARK: - Extensions
+
+private extension Int {
+    
+    private var conversionFactor: Double { 0.1 }
+    
+    func toFormattedWeight() -> String {
+        return String(format: "%.1f Kg", Double(self) * conversionFactor)
+    }
+    
+    func toFormattedHeight() -> String {
+        return String(format: "%.1f m", Double(self) * conversionFactor)
     }
 }
