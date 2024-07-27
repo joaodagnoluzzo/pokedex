@@ -8,7 +8,10 @@
 
 import UIKit
 
-final class PokemonTableViewController: UITableViewController {
+final class PokemonTableViewController: UIViewController {
+
+    private var tableView = PokemonTableView()
+    
 
     
     var type: PokeTypeUrl?
@@ -16,10 +19,37 @@ final class PokemonTableViewController: UITableViewController {
     private let viewModel = PokemonViewModel()
     private var loadSpinner = UIActivityIndicatorView(style: .large)
     
+    
+    init(type: PokeTypeUrl? = PokeTypeUrl(name: "Fire", url: "https://pokeapi.co/api/v2/type/1/")) {
+        super.init(nibName: nil, bundle: nil)
+        self.type = type
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+    
+    func setupTableView() {
+        view.addSubview(tableView)
+        
+        tableView.dataSource = self
+        tableView.delegate = self
+        
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        
+        tableView.register(GenericTableViewCell.self, forCellReuseIdentifier: GenericTableViewCell.identifier)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupTableView()
+        
         self.setTitle(pokeType: type)
-        self.loadSpinner.setupTableViewIndicator(view: self.view)
+//        self.loadSpinner.setupTableViewIndicator(view: self.view)
         self.retrieveData(pokeType: type)
     }
     
@@ -59,26 +89,6 @@ final class PokemonTableViewController: UITableViewController {
             self.present(errorMsg, animated: true, completion: nil)
         }
     }
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.pokemonTableViewData.count
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return CGFloat(50.0)
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = self.tableView.dequeueReusableCell(withIdentifier: "pokemonListCell", for: indexPath)
-        cell.textLabel?.text = self.pokemonTableViewData[indexPath.row].name
-//        cell.configureWithPokeballColors()
-//        cell.configureWithPokemonFont()
-        return cell
-    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "pokemonDetailSegue"){
@@ -88,4 +98,33 @@ final class PokemonTableViewController: UITableViewController {
         }
     }
 
+}
+
+
+extension PokemonTableViewController: UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = self.tableView.dequeueReusableCell(withIdentifier: GenericTableViewCell.identifier, for: indexPath) as? GenericTableViewCell else {
+            return UITableViewCell()
+        }
+        
+        let item = pokemonTableViewData[indexPath.row]
+        cell.textLabel?.text = item.name
+
+        return cell
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.pokemonTableViewData.count
+    }
+}
+
+extension PokemonTableViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return CGFloat(50.0)
+    }
 }

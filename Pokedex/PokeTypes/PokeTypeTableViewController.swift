@@ -16,7 +16,6 @@ final class PokeTypeTableViewController: UIViewController {
     
     
     private var tableView = PokeTypeTableView()
-    private var myCell = GenericTableViewCell()
     
     func setupTableView() {
         view.addSubview(tableView)
@@ -105,6 +104,11 @@ extension PokeTypeTableViewController: UITableViewDataSource {
         cell.configure(with: item.name)
 
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let pokemonTableViewController = PokemonTableViewController(type: self.tableViewData[indexPath.row])
+        navigationController?.pushViewController(pokemonTableViewController, animated: true)
     }
 }
 
