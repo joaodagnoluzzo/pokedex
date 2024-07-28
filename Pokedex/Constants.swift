@@ -28,6 +28,10 @@ struct Constants {
         static let rowSize: CGFloat = 50
     }
     
+    struct PokeDetails {
+        static let shareIcon = "square.and.arrow.up"
+    }
+    
     struct UI {
 
         struct Colors {
@@ -49,6 +53,7 @@ struct Constants {
         static let pokemonEscaped = "Couldn't catch this {pokemon})"
         static let pokeTypesNotFound = "PokeTypes not found! Check your Pokenet connection."
         static let acceptLabel = "Ok"
-        static let typeIsNil = "Type is nil"
+        static let typeIsNil = "Optional(PokeType) is nil"
+        static let pokeUrlIsNil = "Optional(PokeUrl) is nil"
     }
 }

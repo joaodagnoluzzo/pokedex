@@ -16,7 +16,6 @@ final class PokeTypeTableViewController: UIViewController {
     
     func setupTableView() {
         view.addSubview(tableView)
-        
         tableView.setupConstraints()
         
         tableView.register(PokedexGenericTableViewCell.self, forCellReuseIdentifier: PokedexGenericTableViewCell.identifier)

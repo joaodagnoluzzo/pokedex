@@ -10,18 +10,17 @@ import UIKit
 
 final class PokemonDetailsViewController: UIViewController {
     
+    var loadSpinner = PokedexActivityIndicatorView()
     let detailsView = PokemonDetailsView()
-    var pokemonUrl: PokeUrl?
-    
-    private let viewModel = PokemonDetailsViewModel()
+    private var viewModel: PokemonDetailsViewModel!
     
     override func loadView() {
         view = detailsView
     }
     
-    init(pokemon: PokeUrl?) {
+    init(pokemon: PokeUrl) {
         super.init(nibName: nil, bundle: nil)
-        self.pokemonUrl = pokemon
+        viewModel = PokemonDetailsViewModel(pokeUrl: pokemon)
     }
     
     required init?(coder: NSCoder) {
@@ -31,43 +30,41 @@ final class PokemonDetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setTitle(pokemonUrl: pokemonUrl)
+        setTitle()
         setRightNavigationBarButton()
-        retrieveData(pokemonUrl: pokemonUrl)
+        setupLoadingScreen()
+        retrieveData()
         
     }
     
     private func setupLoadingScreen(){
-//        self.loadSpinnerView.view.frame = self.view.frame
-//        self.view.addSubview(self.loadSpinnerView.view)
-//        self.pokemonShareButton?.isEnabled = false
+        view.addSubview(loadSpinner)
+        loadSpinner.setupConstraints()
     }
     
-    private func removeLoadingScreen(){
-        DispatchQueue.main.async {
-            
-//            self.pokemonShareButton?.isEnabled = true
-        }
-    }
-    
-    private func setTitle(pokemonUrl: PokeUrl?){
-        guard let pokemonUrl = pokemonUrl else { return }
+    private func setTitle(){
+        guard let pokemonUrl = viewModel.pokemonUrl else { return }
         self.title = pokemonUrl.name
     }
     
     private func setRightNavigationBarButton() {
-        let pokemonShareButton = UIBarButtonItem(image: UIImage.init(systemName: "square.and.arrow.up"), style: .plain, target: self, action: #selector(sharePokemonInfo))
+        let pokemonShareButton = UIBarButtonItem(
+            image: UIImage.init(
+                systemName: Constants.PokeDetails.shareIcon
+            ),
+            style: .plain,
+            target: self,
+            action: #selector(sharePokemonInfo)
+        )
         navigationItem.rightBarButtonItem = pokemonShareButton
     }
     
-    private func retrieveData(pokemonUrl: PokeUrl?){
-        guard let pokemonUrl = pokemonUrl else { self.handleError(); return }
-//        self.setupLoadingScreen()
-        self.viewModel.retrievePokemonDetails(pokemonUrl: pokemonUrl.url) { (results) in
-            switch results {
-            case .success(let pokemon):
-                self.setupViews(pokemon: pokemon)
-            case .failure(_):
+    private func retrieveData(){
+        loadSpinner.startAnimating()
+        viewModel.retrievePokemonDetailsV2 { error in
+            if error == nil {
+                self.setupViews()
+            } else {
                 self.handleError()
             }
         }
@@ -79,9 +76,9 @@ final class PokemonDetailsViewController: UIViewController {
                 title: Constants.Error.title,
                 errorMessage: Constants.Error.pokemonEscaped.replacingOccurrences(of: "{pokemon}", with: (self.title ?? "Pokémon")))
             { _ in
-//                self.removeLoadingScreen()
                 self.popViewController()
             }
+            self.loadSpinner.stopAnimating()
             self.present(errorMsg, animated: true, completion: nil)
         }
     }
@@ -91,18 +88,17 @@ final class PokemonDetailsViewController: UIViewController {
         navController.popViewController(animated: true)
     }
     
-    private func setupViews(pokemon: PokemonModel){
-        
+    private func setupViews() {
         DispatchQueue.main.async {
-            let formattedHeight = pokemon.height.toFormattedHeight()
-            let formattedWeight = pokemon.weight.toFormattedWeight()
-            let formattedAbilities = self.formatAbilities(pokemon.abilities)
-            
-            self.detailsView.configure(formattedHeight, formattedWeight, formattedAbilities)
-            self.removeLoadingScreen()
+            self.detailsView.configure(
+                self.viewModel.getFormattedHeight(),
+                self.viewModel.getFormattedWeight(),
+                self.viewModel.getFormattedAbilities()
+            )
+            self.loadSpinner.stopAnimating()
         }
         
-        self.setPokemonImage(url: pokemon.sprites.frontDefault) { [weak self] image in
+        self.setPokemonImage(url: viewModel.getImageUrl()) { [weak self] image in
             DispatchQueue.main.async {
                 self?.detailsView.configure(with: image)
             }
@@ -116,17 +112,7 @@ final class PokemonDetailsViewController: UIViewController {
         })
     }
     
-    private func formatAbilities(_ abilities: [Abilities]) -> String {
-        var formattedText = ""
-        for item in abilities {
-            let formattedAbilityName = item.ability.name.toTitleCase()
-            formattedText += "\(formattedAbilityName)\n"
-        }
-        return formattedText
-    }
-    
     @objc func sharePokemonInfo() {
-        
         let shareInfo = viewModel.shareInfo()
         
         let shareViewController = UIActivityViewController(activityItems: [shareInfo], applicationActivities: [])
