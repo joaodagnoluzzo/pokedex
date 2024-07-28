@@ -12,19 +12,20 @@ import Foundation
 class PokeTypeViewModel {
 
     private var apiManager: APIManagerProtocol
+    private var pokeTypeList: [PokeTypeUrl] = []
     
     init(apiManager: APIManagerProtocol = APIManager()) {
         self.apiManager = apiManager
     }
     
-    func retrievePokeTypes(completion: @escaping (Result<[PokeTypeUrl], Error>) -> Void){
-        
-        self.apiManager.fetchPokeTypes { result in
+    func retrievePokeTypes(completion: @escaping (Error?) -> ()) {
+        self.apiManager.fetchPokeTypes { [weak self] result in
             switch result {
             case .success(let data):
-                completion(.success(self.formatTypes(list: data.results)))
+                self?.pokeTypeList = self?.formatTypes(list: data.results) ?? []
+                completion(nil)
             case .failure(let error):
-                completion(.failure(error))
+                completion(error)
             }
         }
     }
@@ -33,6 +34,14 @@ class PokeTypeViewModel {
         return list.map { pokeType in
             return PokeTypeUrl(name: pokeType.name.capitalizeFirstLetter(), url: pokeType.url)
         }
+    }
+    
+    func pokeTypeAt(index: Int) -> PokeTypeUrl {
+        return self.pokeTypeList[index]
+    }
+    
+    func pokeTypeCount() -> Int {
+        return self.pokeTypeList.count
     }
     
 }

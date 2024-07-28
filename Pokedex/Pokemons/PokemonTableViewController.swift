@@ -10,17 +10,13 @@ import UIKit
 
 final class PokemonTableViewController: UIViewController {
 
-    private var tableView = PokemonTableView()
-    
-
-    
-    var type: PokeTypeUrl?
-    private var pokemonTableViewData = [PokeUrl]()
+    private var tableView = PokedexGenericTableView()
     private let viewModel = PokemonViewModel()
+    private let loadSpinner = PokedexActivityIndicatorView()
     
-    init(type: PokeTypeUrl? = PokeTypeUrl(name: "Fire", url: "https://pokeapi.co/api/v2/type/1/")) {
+    init(type: PokeTypeUrl?) {
         super.init(nibName: nil, bundle: nil)
-        self.type = type
+        viewModel.pokeType = type
     }
     
     required init?(coder: NSCoder) {
@@ -29,60 +25,75 @@ final class PokemonTableViewController: UIViewController {
     
     func setupTableView() {
         view.addSubview(tableView)
-        
+        tableView.setupConstraints()
         tableView.dataSource = self
         tableView.delegate = self
         
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        
-        tableView.register(GenericTableViewCell.self, forCellReuseIdentifier: GenericTableViewCell.identifier)
+        tableView.register(PokedexGenericTableViewCell.self, forCellReuseIdentifier: PokedexGenericTableViewCell.identifier)
+    }
+    
+    func setupLoadSpinner() {
+        view.addSubview(loadSpinner)
+        loadSpinner.setupConstraints()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        tableView.clearRowSelection()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setTitle(pokeType: viewModel.pokeType)
         setupTableView()
-        
-        self.setTitle(pokeType: type)
-        self.retrieveData(pokeType: type)
+        setupLoadSpinner()
+        retrieveData()
     }
     
     private func setTitle(pokeType: PokeTypeUrl?){
-        guard let type = type else { return }
-        self.title = type.name
+        guard let pokeType = pokeType else { return }
+        title = pokeType.name
     }
     
-    private func retrieveData(pokeType: PokeTypeUrl?){
-        guard let type = type else { return }
-//        self.tableView.startLoading()
-        self.viewModel.retrievePokemonList(typeUrl: type.url) { [weak self] (results) in
-            switch results {
-            case .success(let data):
-                self?.pokemonTableViewData = data
-                DispatchQueue.main.async {
-//                    self?.tableView.stopLoading()
-                    self?.tableView.reloadData()
-                    self?.handleEmptyList()
-                }
-            case .failure(_):
+    private func retrieveData(){
+        loadSpinner.startAnimating()
+        viewModel.retrievePokemonList() { [weak self] error in
+            if error != nil {
                 self?.handleError()
+            } else {
+                self?.handleSuccess()
             }
         }
     }
     
+    private func handleSuccess() {
+        DispatchQueue.main.async {
+            self.loadSpinner.stopAnimating()
+            self.tableView.reloadData()
+            self.handleEmptyList()
+        }
+    }
+    
     private func handleEmptyList(){
-        if self.pokemonTableViewData.count > 0 { return }
-        let emptyMsg = UIAlertController(title: "Oops", errorMessage: "Sounds like pokémon of this type are yet to be discovered!\nGotta catch 'em all!")
+        if viewModel.pokemonCount() > 0 { return }
+        let emptyMsg = UIAlertController(
+            title: Constants.Error.title,
+            errorMessage: Constants.Error.emptyPokemonList) {
+                [weak self] _ in
+                self?.navigationController?.popViewController(animated: true)
+            }
         self.present(emptyMsg, animated: true, completion: nil)
     }
     
     private func handleError(){
         DispatchQueue.main.async {
-//            self.tableView.stopLoading()
-            let errorMsg = UIAlertController(title: "Error", errorMessage: "It seems we lost our pokémons! Check your Pokenet connection.")
+            self.loadSpinner.stopAnimating()
+            let errorMsg = UIAlertController(
+                title: Constants.Error.title,
+                errorMessage: Constants.Error.pokeTypesNotFound) {
+                    [weak self] _ in
+                    self?.navigationController?.popViewController(animated: true)
+                }
             self.present(errorMsg, animated: true, completion: nil)
         }
     }
@@ -92,28 +103,29 @@ final class PokemonTableViewController: UIViewController {
 extension PokemonTableViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = self.tableView.dequeueReusableCell(withIdentifier: GenericTableViewCell.identifier, for: indexPath) as? GenericTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: PokedexGenericTableViewCell.identifier, for: indexPath) as? PokedexGenericTableViewCell else {
             return UITableViewCell()
         }
         
-        let item = pokemonTableViewData[indexPath.row]
+        let item = viewModel.pokemonAt(index: indexPath.row)
         cell.configure(with: item.name)
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let detailsViewController = PokemonDetailsViewController(pokemon: pokemonTableViewData[indexPath.row])
+        let item = viewModel.pokemonAt(index: indexPath.row)
+        let detailsViewController = PokemonDetailsViewController(pokemon: item)
         navigationController?.pushViewController(detailsViewController, animated: true)
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.pokemonTableViewData.count
+        return viewModel.pokemonCount()
     }
 }
 
 extension PokemonTableViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return CGFloat(50.0)
+        return Constants.TableView.rowSize
     }
 }

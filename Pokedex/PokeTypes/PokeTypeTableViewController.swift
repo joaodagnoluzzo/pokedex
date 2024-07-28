@@ -10,100 +10,96 @@ import UIKit
 
 final class PokeTypeTableViewController: UIViewController {
 
-    private var tableViewData = [PokeTypeUrl]()
     private let viewModel = PokeTypeViewModel()
-    private var tableView = PokeTypeTableView()
+    private var tableView = PokedexGenericTableView()
+    private let loadingSpinner = PokedexActivityIndicatorView()
     
     func setupTableView() {
         view.addSubview(tableView)
         
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        tableView.setupConstraints()
         
-        
-        tableView.register(GenericTableViewCell.self, forCellReuseIdentifier: GenericTableViewCell.identifier)
+        tableView.register(PokedexGenericTableViewCell.self, forCellReuseIdentifier: PokedexGenericTableViewCell.identifier)
         tableView.dataSource = self
         tableView.delegate = self
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.setNavigationBarTitleProperties()
+    func setupLoadingSpinner() {
+        view.addSubview(loadingSpinner)
+        loadingSpinner.setupConstraints()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        tableView.clearRowSelection()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Types"
+        self.title = Constants.PokeTypes.title
         setupTableView()
+        setupLoadingSpinner()
+        
         self.retrieveData()
     }
     
-    private func setNavigationBarTitleProperties(){
-        guard let navController = self.navigationController else { return }
-        guard let font = UIFont(name: "PokemonSolidNormal", size: 25) else { return }
-        guard let white = UIColor(named: "White") else { return }
-        guard let black = UIColor(named: "Black") else { return }
-        navController.navigationBar.titleTextAttributes = self.setupStrokeAttributes(font: font, strokeWidth: 4.0, insideColor: white, strokeColor: black)
+    private func retrieveData(){
+        loadingSpinner.startAnimating()
+        
+        
+        viewModel.retrievePokeTypes { [weak self] error in
+            if error == nil {
+                self?.reloadList()
+            } else {
+                self?.handleError()
+            }
+        }
     }
     
-    private func retrieveData(){
-        viewModel.retrievePokeTypes { (result) in
-            switch result {
-            case .success(let data):
-                self.tableViewData = data
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
-            case .failure(_):
-                self.handleError()
-            }
+    private func reloadList() {
+        DispatchQueue.main.async {
+            self.loadingSpinner.stopAnimating()
+            self.tableView.reloadData()
         }
     }
     
     private func handleError(){
         DispatchQueue.main.async {
-            let errorMsg = UIAlertController(title: "Error", errorMessage: "PokeTypes not found! Check your Pokenet connection.")
+            self.loadingSpinner.stopAnimating()
+            let errorMsg = UIAlertController(title: Constants.Error.title, errorMessage: Constants.Error.pokeTypesNotFound)
             self.present(errorMsg, animated: true, completion: nil)
         }
     }
-    
-    public func setupStrokeAttributes(font: UIFont, strokeWidth: Float, insideColor: UIColor, strokeColor: UIColor) -> [NSAttributedString.Key: Any]{
-        return [NSAttributedString.Key.strokeColor : strokeColor, NSAttributedString.Key.foregroundColor : insideColor, NSAttributedString.Key.strokeWidth : -strokeWidth, NSAttributedString.Key.font : font]
-    }
 }
-
 
 extension PokeTypeTableViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tableViewData.count
+        return viewModel.pokeTypeCount()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: GenericTableViewCell.identifier, for: indexPath) as? GenericTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: PokedexGenericTableViewCell.identifier, for: indexPath) as? PokedexGenericTableViewCell else {
             return UITableViewCell()
         }
-        
-        let item = tableViewData[indexPath.row]
+        let item = viewModel.pokeTypeAt(index: indexPath.row)
         cell.configure(with: item.name)
-
+        
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let pokemonTableViewController = PokemonTableViewController(type: self.tableViewData[indexPath.row])
+        let item = viewModel.pokeTypeAt(index: indexPath.row)
+        let pokemonTableViewController = PokemonTableViewController(type: item)
         navigationController?.pushViewController(pokemonTableViewController, animated: true)
     }
+    
 }
 
 extension PokeTypeTableViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return CGFloat(50)
+        return Constants.TableView.rowSize
     }
     
 }

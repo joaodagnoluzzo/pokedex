@@ -38,4 +38,13 @@ class PokemonDetailsViewModel {
         }
     }
     
+    func shareInfo() -> String {
+        
+//        var shareInfo = "*\(self.title ?? "")*\n"
+//        shareInfo += "Weight: \(self.pokemonWeightLabel?.text ?? "")\n"
+//        shareInfo += "Height: \(self.pokemonHeightLabel?.text ?? "")\n"
+//        shareInfo += "Abilities:\n\(self.pokemonAbilitiesTextView?.text ?? "")"
+        
+        return ""
+    }
 }

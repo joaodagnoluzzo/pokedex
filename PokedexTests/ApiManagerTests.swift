@@ -29,7 +29,7 @@ class ApiManagerTests: QuickSpec {
         }
         
         describe("requesting") {
-            context("when fetchint poketypes and there's no results") {
+            context("when fetching poketypes and there's no results") {
                 beforeEach {
                     networkSession.data = "{\"count\":0, \"results\":[]}".data(using: .utf8)
                     networkSession.error = nil

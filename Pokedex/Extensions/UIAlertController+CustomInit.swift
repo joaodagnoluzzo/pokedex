@@ -9,8 +9,8 @@
 import UIKit
 
 extension UIAlertController {
-    convenience init(title: String, errorMessage: String) {
+    convenience init(title: String, errorMessage: String, handler: ((UIAlertAction) -> Void)? = nil) {
         self.init(title: title, message: errorMessage, preferredStyle: .alert)
-        self.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.addAction(UIAlertAction(title: Constants.Error.acceptLabel, style: .default, handler: handler))
     }
 }

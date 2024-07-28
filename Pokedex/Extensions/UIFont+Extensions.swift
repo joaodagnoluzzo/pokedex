@@ -11,20 +11,18 @@ import UIKit
 extension UIFont {
     
     static func customBodyFont(size: CGFloat) -> UIFont {
-//        if let customFont = UIFont(name: "PokemonGB", size: size) {
-//            return UIFontMetrics(forTextStyle: .body).scaledFont(for: customFont)
-//        } else {
-//            return UIFont()
-//        }
-        guard let customFont = UIFont(name: "PokemonGB", size: size) else { return UIFont() }
-        return customFont
+        return UIFont.customFont(named: "PokemonGB", size: size)
     }
     
     static func customTitleFont(size: CGFloat) -> UIFont {
-        if let customFont = UIFont(name: "Pokemon Solid", size: size) {
+        return UIFont.customFont(named: "Pokemon Solid", size: size)
+    }
+    
+    private static func customFont(named fontName: String, size: CGFloat) -> UIFont {
+        if let customFont = UIFont(name: fontName, size: size) {
             return UIFontMetrics(forTextStyle: .title2).scaledFont(for: customFont)
         } else {
-            return UIFont()
+            return UIFont.systemFont(ofSize: size)
         }
     }
     

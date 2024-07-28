@@ -1,5 +1,5 @@
 //
-//  GenericTableViewCell.swift
+//  PokedexGenericTableViewCell.swift
 //  Pokedex
 //
 //  Created by João Pedro C. D'Agnoluzzo on 27/07/24.
@@ -9,7 +9,7 @@
 import UIKit
 
 
-class GenericTableViewCell: UITableViewCell {
+class PokedexGenericTableViewCell: UITableViewCell {
     
     static let identifier = "genericTableViewCellIdentifier"
     
@@ -55,7 +55,7 @@ class GenericTableViewCell: UITableViewCell {
     }
     
     func configureStyling() {
-        self.textLabel?.textColor = UIColor(hex: "#222224")
-        self.backgroundColor = UIColor(hex: "#f0f0f0")
+        self.textLabel?.textColor = UIColor(hex: Constants.UI.Colors.black)
+        self.backgroundColor = UIColor(hex: Constants.UI.Colors.white)
     }
 }
