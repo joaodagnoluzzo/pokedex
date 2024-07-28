@@ -1,5 +1,5 @@
 //
-//  UIColor+Hex.swift
+//  UIColor+Extensions.swift
 //  Pokedex
 //
 //  Created by João Pedro C. D'Agnoluzzo on 26/07/24.

@@ -11,7 +11,6 @@ import Foundation
 
 final class APIManager: APIManagerProtocol {
     
-    private let apiBaseUrl = "https://pokeapi.co/api/v2"
     private let session: NetworkSession
     
     init(session: NetworkSession = URLSession.shared) {
@@ -20,7 +19,7 @@ final class APIManager: APIManagerProtocol {
     
     func fetchPokeTypes(completion: @escaping (Result<PokeTypeModel, Error>)-> Void) {
               
-        let requestHttp = "\(apiBaseUrl)/type/"
+        let requestHttp = Constants.API.baseUrl + Constants.API.Endpoints.type
         guard let requestURL = URL(string: requestHttp) else { return }
         
         self.session.loadData(requestUrl: requestURL, completionHandler: { (data, response, error) -> Void in

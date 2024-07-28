@@ -22,20 +22,20 @@ class PokemonTableView: UITableView {
     }
     
     func setup() {
-        loadSpinner.setupTableViewIndicator(view: self)
-        addSubview(loadSpinner)
-        
-        NSLayoutConstraint.activate([
-            loadSpinner.centerYAnchor.constraint(equalTo: centerYAnchor),
-            loadSpinner.centerXAnchor.constraint(equalTo: centerXAnchor)
-        ])
+//        loadSpinner.setupTableViewIndicator(view: self)
+//        addSubview(loadSpinner)
+//        
+//        NSLayoutConstraint.activate([
+//            loadSpinner.centerYAnchor.constraint(equalTo: centerYAnchor),
+//            loadSpinner.centerXAnchor.constraint(equalTo: centerXAnchor)
+//        ])
     }
     
-    func startLoading() {
-        loadSpinner.startAnimating()
-    }
-    
-    func stopLoading() {
-        loadSpinner.stopAnimating()
-    }
+//    func startLoading() {
+//        loadSpinner.startAnimating()
+//    }
+//
+//    func stopLoading() {
+//        loadSpinner.stopAnimating()
+//    }
 }

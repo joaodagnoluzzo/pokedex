@@ -57,13 +57,13 @@ final class PokemonTableViewController: UIViewController {
     
     private func retrieveData(pokeType: PokeTypeUrl?){
         guard let type = type else { return }
-        self.tableView.startLoading()
+//        self.tableView.startLoading()
         self.viewModel.retrievePokemonList(typeUrl: type.url) { [weak self] (results) in
             switch results {
             case .success(let data):
                 self?.pokemonTableViewData = data
                 DispatchQueue.main.async {
-                    self?.tableView.stopLoading()
+//                    self?.tableView.stopLoading()
                     self?.tableView.reloadData()
                     self?.handleEmptyList()
                 }
@@ -81,7 +81,7 @@ final class PokemonTableViewController: UIViewController {
     
     private func handleError(){
         DispatchQueue.main.async {
-            self.tableView.stopLoading()
+//            self.tableView.stopLoading()
             let errorMsg = UIAlertController(title: "Error", errorMessage: "It seems we lost our pokémons! Check your Pokenet connection.")
             self.present(errorMsg, animated: true, completion: nil)
         }

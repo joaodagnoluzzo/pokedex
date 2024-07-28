@@ -12,9 +12,6 @@ final class PokeTypeTableViewController: UIViewController {
 
     private var tableViewData = [PokeTypeUrl]()
     private let viewModel = PokeTypeViewModel()
-    private var loadSpinner = UIActivityIndicatorView(style: .large)
-    
-    
     private var tableView = PokeTypeTableView()
     
     func setupTableView() {
@@ -36,27 +33,28 @@ final class PokeTypeTableViewController: UIViewController {
         super.viewWillAppear(animated)
         self.setNavigationBarTitleProperties()
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = "Types"
         setupTableView()
-        self.loadSpinner.setupTableViewIndicator(view: self.tableView)
         self.retrieveData()
     }
     
     private func setNavigationBarTitleProperties(){
         guard let navController = self.navigationController else { return }
         guard let font = UIFont(name: "PokemonSolidNormal", size: 25) else { return }
-        navController.navigationBar.titleTextAttributes = self.setupStrokeAttributes(font: font, strokeWidth: 4.0, insideColor: UIColor(hex: "#f0f0f0"), strokeColor: UIColor(hex: "#222224"))
+        guard let white = UIColor(named: "White") else { return }
+        guard let black = UIColor(named: "Black") else { return }
+        navController.navigationBar.titleTextAttributes = self.setupStrokeAttributes(font: font, strokeWidth: 4.0, insideColor: white, strokeColor: black)
     }
     
     private func retrieveData(){
-        self.loadSpinner.startAnimating()
         viewModel.retrievePokeTypes { (result) in
             switch result {
             case .success(let data):
                 self.tableViewData = data
                 DispatchQueue.main.async {
-                    self.loadSpinner.stopAnimating()
                     self.tableView.reloadData()
                 }
             case .failure(_):
@@ -67,7 +65,6 @@ final class PokeTypeTableViewController: UIViewController {
     
     private func handleError(){
         DispatchQueue.main.async {
-            self.loadSpinner.stopAnimating()
             let errorMsg = UIAlertController(title: "Error", errorMessage: "PokeTypes not found! Check your Pokenet connection.")
             self.present(errorMsg, animated: true, completion: nil)
         }
@@ -84,7 +81,6 @@ extension PokeTypeTableViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tableViewData.count
     }
-    
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
