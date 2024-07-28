@@ -6,49 +6,56 @@
 //  Copyright © 2019 João Pedro Cappelletto D'Agnoluzzo. All rights reserved.
 //
 
-import XCTest
+import Quick
+import Nimble
+
 @testable import Pokedex
 
-class ApiManagerTests: XCTestCase {
-
-    var sut: APIManager!
-    var networkSession: NetworkSessionMock!
+class ApiManagerTests: QuickSpec {
     
-    override func setUp() {
-        super.setUp()
-        networkSession = NetworkSessionMock()
-    }
-
-    override func tearDown() {
-        networkSession = nil
-        sut = nil
-        super.tearDown()
-    }
-
-    func testApiCallEmptyTypeList() {
+    override class  func spec() {
         
-        self.networkSession.data = "{\"count\":0, \"results\":[]}".data(using: .utf8)!
-        self.networkSession.error = nil
+        var sut: APIManager!
+        var networkSession: NetworkSessionMock!
         
-        let promise = expectation(description: "Result count is zero")
-        var pokeType: PokeTypeModel?
-        var error: Error?
-        sut = APIManager(session: networkSession)
-
-        sut.fetchPokeTypes { (results) in
-            switch results{
-            case .success(let pokeTypeResponse):
-                pokeType = pokeTypeResponse
-            case .failure(let responseError):
-                error = responseError
-            }
-            promise.fulfill()
+        beforeEach {
+            networkSession = NetworkSessionMock()
+            sut = APIManager(session: networkSession)
         }
-        wait(for: [promise], timeout: 3.0)
         
-        XCTAssertNil(error)
-        XCTAssertNotNil(pokeType)
-        XCTAssertEqual(pokeType?.count, 0, "Zero results should be returned")
+        afterEach {
+            networkSession = nil
+            sut = nil
+        }
+        
+        describe("requesting") {
+            context("when fetching a list of pokemon types") {
+                beforeEach {
+                    networkSession.data = "{\"count\":0, \"results\":[]}".data(using: .utf8)
+                    networkSession.error = nil
+                }
+                
+                it("should return an empty list") {
+                    var pokeType: PokeTypeModel?
+                    var error: Error?
+                    
+                    waitUntil(timeout: .seconds(3)) { (done) in
+                        sut.fetchPokeTypes { (result) in
+                            switch result {
+                            case .success(let pokeTypeResponse):
+                                pokeType = pokeTypeResponse
+                            case .failure(let responseError):
+                                error = responseError
+                            }
+                            done()
+                        }
+                    }
+                    
+                    expect(error).to(beNil())
+                    expect(pokeType).toNot(beNil())
+                    expect(pokeType?.count).to(equal(0))
+                }
+            }
+        }
     }
-    
 }

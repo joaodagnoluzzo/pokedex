@@ -20,7 +20,7 @@ target 'Pokedex' do
   target 'PokedexTests' do
     inherit! :search_paths
     # Pods for testing
-	testing_pods
+    testing_pods
   end
 
   target 'PokedexUITests' do
