@@ -15,17 +15,17 @@ class ApiManagerTests: QuickSpec {
     
     override class  func spec() {
         
-        var sut: APIManager!
+        var viewModel: APIManager!
         var networkSession: NetworkSessionMock!
         
         beforeEach {
             networkSession = NetworkSessionMock()
-            sut = APIManager(session: networkSession)
+            viewModel = APIManager(session: networkSession)
         }
         
         afterEach {
             networkSession = nil
-            sut = nil
+            viewModel = nil
         }
         
         describe("requesting") {
@@ -39,8 +39,8 @@ class ApiManagerTests: QuickSpec {
                     var pokeType: PokeTypeModel?
                     var error: Error?
                     
-                    waitUntil(timeout: .seconds(3)) { (done) in
-                        sut.fetchPokeTypes { (result) in
+                    waitUntil { (done) in
+                        viewModel.fetchPokeTypes { (result) in
                             switch result {
                             case .success(let pokeTypeResponse):
                                 pokeType = pokeTypeResponse
@@ -68,8 +68,8 @@ class ApiManagerTests: QuickSpec {
                     var pokeType: PokeTypeModel?
                     var error: Error?
                     
-                    waitUntil(timeout: .seconds(3)) { (done) in
-                        sut.fetchPokeTypes { (result) in
+                    waitUntil { (done) in
+                        viewModel.fetchPokeTypes { (result) in
                             switch result {
                             case .success(let pokeTypeResponse):
                                 pokeType = pokeTypeResponse

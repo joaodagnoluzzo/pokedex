@@ -11,12 +11,13 @@ import UIKit
 final class PokemonTableViewController: UIViewController {
 
     private var tableView = PokedexGenericTableView()
-    private let viewModel = PokemonViewModel()
+    private var viewModel: PokemonViewModel!
     private let loadSpinner = PokedexActivityIndicatorView()
     
     init(type: PokeTypeUrl?) {
         super.init(nibName: nil, bundle: nil)
-        viewModel.pokeType = type
+        guard let type = type else { return }
+        viewModel = PokemonViewModel(type: type)
     }
     
     required init?(coder: NSCoder) {
@@ -44,15 +45,14 @@ final class PokemonTableViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setTitle(pokeType: viewModel.pokeType)
+        setTitle()
         setupTableView()
         setupLoadSpinner()
         retrieveData()
     }
     
-    private func setTitle(pokeType: PokeTypeUrl?){
-        guard let pokeType = pokeType else { return }
-        title = pokeType.name
+    private func setTitle(){
+        title = viewModel.getTitle()
     }
     
     private func retrieveData(){

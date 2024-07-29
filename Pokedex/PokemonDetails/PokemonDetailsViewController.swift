@@ -43,8 +43,7 @@ final class PokemonDetailsViewController: UIViewController {
     }
     
     private func setTitle(){
-        guard let pokemonUrl = viewModel.pokemonUrl else { return }
-        self.title = pokemonUrl.name
+        self.title = viewModel.getPokemonName()
     }
     
     private func setRightNavigationBarButton() {
@@ -61,7 +60,7 @@ final class PokemonDetailsViewController: UIViewController {
     
     private func retrieveData(){
         loadSpinner.startAnimating()
-        viewModel.retrievePokemonDetailsV2 { error in
+        viewModel.retrievePokemonDetails { error in
             if error == nil {
                 self.setupViews()
             } else {
@@ -107,7 +106,10 @@ final class PokemonDetailsViewController: UIViewController {
     
     private func setPokemonImage(url: String, completionHandler: @escaping (UIImage) -> Void){
         self.viewModel.retrievePokemonImage(imageUrl: url, completion: { image in
-            guard let image = image else { return }
+            guard let image = image else {
+                completionHandler(UIImage())
+                return
+            }
             completionHandler(image)
         })
     }

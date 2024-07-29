@@ -12,8 +12,8 @@ import UIKit
 class PokemonDetailsViewModel {
     
     private var apiManager: APIManagerProtocol
-    var pokemonUrl: PokeUrl?
-    var pokemon: PokemonModel = PokemonModel()
+    private var pokemonUrl: PokeUrl
+    private var pokemon: PokemonModel = PokemonModel()
     
     
     init(apiManager: APIManagerProtocol = APIManager(), pokeUrl: PokeUrl) {
@@ -21,24 +21,7 @@ class PokemonDetailsViewModel {
         self.pokemonUrl = pokeUrl
     }
     
-    func retrievePokemonDetails(pokemonUrl: String, completion: @escaping (Result<PokemonModel, Error>) -> Void){
-        
-        self.apiManager.fetchPokemonDetails(url: pokemonUrl) { (result) in
-            switch result {
-            case .success(let data):
-                completion(.success(data))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
-    
-    func retrievePokemonDetailsV2(completion: @escaping (Error?) -> ()) {
-        guard let pokemonUrl = pokemonUrl else {
-            completion(PokemonModelError(info: Constants.Error.pokeUrlIsNil))
-            return
-        }
-        
+    func retrievePokemonDetails(completion: @escaping (Error?) -> ()) {
         self.apiManager.fetchPokemonDetails(url: pokemonUrl.url) { [weak self] result in
             switch result {
             case .success(let data):
@@ -52,16 +35,21 @@ class PokemonDetailsViewModel {
     }
     
     func retrievePokemonImage(imageUrl: String, completion: @escaping (UIImage?) -> Void) {
-        
         self.apiManager.fetchData(from: imageUrl) { data in
-            guard let data = data else { return }
-            
+            guard let data = data else {
+                completion(nil)
+                return
+            }
             completion(UIImage(data: data))
         }
     }
     
+    func getPokemonName() -> String {
+        return pokemonUrl.name
+    }
+    
     func getFormattedWeight() -> String {
-        return pokemon.weight.toFormattedHeight()
+        return pokemon.weight.toFormattedWeight()
     }
     
     func getFormattedHeight() -> String {

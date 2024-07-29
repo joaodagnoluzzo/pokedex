@@ -10,20 +10,16 @@ import Foundation
 
 class PokemonViewModel {
     
-    var pokeType: PokeTypeUrl?
+    private var pokeType: PokeTypeUrl
     private var apiManager: APIManagerProtocol
     private var pokemonList: [PokeUrl] = []
     
-    init(apiManager: APIManagerProtocol = APIManager()) {
+    init(apiManager: APIManagerProtocol = APIManager(), type: PokeTypeUrl) {
         self.apiManager = apiManager
+        pokeType = type
     }
     
     func retrievePokemonList(completion: @escaping (Error?) -> ()) {
-        guard let pokeType = pokeType else {
-            completion(PokemonModelError(info: Constants.Error.typeIsNil))
-            return
-        }
-        
         self.apiManager.fetchPokemonsForType(url: pokeType.url) { [weak self] result in
             switch result {
             case .success(let data):
@@ -42,6 +38,10 @@ class PokemonViewModel {
         }.map { pokeUrl in
             PokeUrl(name: pokeUrl.name.toTitleCase(), url: pokeUrl.url)
         }
+    }
+    
+    func getTitle() -> String {
+        return pokeType.name
     }
     
     func pokemonAt(index: Int) -> PokeUrl {
