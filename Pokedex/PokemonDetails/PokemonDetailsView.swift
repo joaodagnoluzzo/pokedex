@@ -18,6 +18,7 @@ class PokemonDetailsView: UIView {
     private let weightLabel = UILabel()
     private let abilitiesLabel = UILabel()
     private let abilitiesTextView = UITextView()
+    private let imageActivityIndicator = PokedexActivityIndicatorView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -33,10 +34,12 @@ class PokemonDetailsView: UIView {
         backgroundColor = .white
         setupSubviews()
         setupConstraints()
+        imageActivityIndicator.startAnimating()
     }
     
     func configure(with image: UIImage) {
         imageView.image = image
+        imageActivityIndicator.stopAnimating()
     }
     
     func configure(_ height: String, _ weight: String, _ abilities: String) {
@@ -69,6 +72,8 @@ class PokemonDetailsView: UIView {
     private func setupImageView() {
         imageView.backgroundColor = .clear
         imageView.contentMode = .scaleAspectFit
+        imageView.addSubview(imageActivityIndicator)
+        imageActivityIndicator.setupConstraints()
         imageView.translatesAutoresizingMaskIntoConstraints = false
     }
     

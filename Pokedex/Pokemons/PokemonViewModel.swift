@@ -32,7 +32,7 @@ class PokemonViewModel {
         }
     }
     
-    private func parseTypeDetailsIntoPokemonList(details: PokemonDetailsModel) -> [PokeUrl] {
+    private func parseTypeDetailsIntoPokemonList(details: PokemonListModel) -> [PokeUrl] {
         return details.pokemon.map { preview in
             preview.pokemon
         }.map { pokeUrl in

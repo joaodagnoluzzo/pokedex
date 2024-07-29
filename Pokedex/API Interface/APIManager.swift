@@ -45,7 +45,7 @@ final class APIManager: APIManagerProtocol {
         return pokeTypes
     }
     
-    func fetchPokemonsForType(url: String, completion: @escaping (Result<PokemonDetailsModel, Error>)-> Void){
+    func fetchPokemonsForType(url: String, completion: @escaping (Result<PokemonListModel, Error>)-> Void){
         
         guard let requestUrl = URL(string:url) else { return }
         
@@ -60,10 +60,10 @@ final class APIManager: APIManagerProtocol {
         })
     }
     
-    private func decodePokeTypeDetails(data: Data) -> PokemonDetailsModel {
-        var pokeTypeDetails = PokemonDetailsModel()
+    private func decodePokeTypeDetails(data: Data) -> PokemonListModel {
+        var pokeTypeDetails = PokemonListModel()
         do {
-            let result = try JSONDecoder().decode(PokemonDetailsModel.self, from: data)
+            let result = try JSONDecoder().decode(PokemonListModel.self, from: data)
             pokeTypeDetails = result
         } catch {
             print("JSON Decoding Error: \(error)")
@@ -71,7 +71,7 @@ final class APIManager: APIManagerProtocol {
         return pokeTypeDetails
     }
    
-    func fetchPokemonDetails(url: String, completion: @escaping (Result<PokemonModel, Error>) -> Void){
+    func fetchPokemonDetails(url: String, completion: @escaping (Result<PokemonDetailsModel, Error>) -> Void){
         
         guard let requestUrl = URL(string: url) else { return }
         
@@ -87,10 +87,10 @@ final class APIManager: APIManagerProtocol {
         })
     }
     
-    private func decodePokemonDetails(data: Data) -> PokemonModel {
-        var pokemon = PokemonModel()
+    private func decodePokemonDetails(data: Data) -> PokemonDetailsModel {
+        var pokemon = PokemonDetailsModel()
         do {
-            let result = try JSONDecoder().decode(PokemonModel.self, from: data)
+            let result = try JSONDecoder().decode(PokemonDetailsModel.self, from: data)
             pokemon = result
         } catch {
             print("JSON Decoding Error: \(error)")

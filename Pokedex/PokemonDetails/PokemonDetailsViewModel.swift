@@ -13,7 +13,7 @@ class PokemonDetailsViewModel {
     
     private var apiManager: APIManagerProtocol
     private var pokemonUrl: PokeUrl
-    private var pokemon: PokemonModel = PokemonModel()
+    private var pokemon: PokemonDetailsModel = PokemonDetailsModel()
     
     
     init(apiManager: APIManagerProtocol = APIManager(), pokeUrl: PokeUrl) {
@@ -28,16 +28,22 @@ class PokemonDetailsViewModel {
                 self?.pokemon = data
                 completion(nil)
             case .failure(let error):
-                self?.pokemon = PokemonModel()
+                self?.pokemon = PokemonDetailsModel()
                 completion(error)
             }
         }
     }
     
     func retrievePokemonImage(imageUrl: String, completion: @escaping (UIImage?) -> Void) {
+        let defaultImage = UIImage(named: "defaultImage")
+        if imageUrl.isEmpty {
+            completion(defaultImage)
+            return
+        }
+        
         self.apiManager.fetchData(from: imageUrl) { data in
             guard let data = data else {
-                completion(nil)
+                completion(defaultImage)
                 return
             }
             completion(UIImage(data: data))
@@ -61,7 +67,11 @@ class PokemonDetailsViewModel {
     }
     
     func getImageUrl() -> String {
-        return pokemon.sprites.frontDefault
+        if let imageUrl = pokemon.sprites.frontDefault {
+            return imageUrl
+        } else {
+            return String()
+        }
     }
     
     private func formatAbilities(_ abilities: [Abilities]) -> String {
@@ -75,10 +85,10 @@ class PokemonDetailsViewModel {
     
     func shareInfo() -> String {
         
-//        var shareInfo = "*\(self.title ?? "")*\n"
-//        shareInfo += "Weight: \(self.pokemonWeightLabel?.text ?? "")\n"
-//        shareInfo += "Height: \(self.pokemonHeightLabel?.text ?? "")\n"
-//        shareInfo += "Abilities:\n\(self.pokemonAbilitiesTextView?.text ?? "")"
+        var shareInfo = "*\(getPokemonName())*\n"
+        shareInfo += "Weight: \(getFormattedWeight())\n"
+        shareInfo += "Height: \(getFormattedHeight())\n"
+        shareInfo += "Abilities:\n\(getFormattedAbilities())"
         
         return ""
     }

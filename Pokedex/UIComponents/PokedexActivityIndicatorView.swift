@@ -13,7 +13,7 @@ class PokedexActivityIndicatorView: UIActivityIndicatorView {
     init() {
         super.init(style: .large)
         hidesWhenStopped = true
-        backgroundColor = UIColor(hex: Constants.UI.Colors.white, alpha: 0.8)
+        backgroundColor = UIColor(hex: Constants.UI.Colors.white, alpha: 0.4)
     }
     
     required init(coder: NSCoder) {

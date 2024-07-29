@@ -88,6 +88,13 @@ final class PokemonDetailsViewController: UIViewController {
     }
     
     private func setupViews() {
+        
+        self.setPokemonImage(url: viewModel.getImageUrl()) { [weak self] image in
+            DispatchQueue.main.async {
+                self?.detailsView.configure(with: image)
+            }
+        }
+        
         DispatchQueue.main.async {
             self.detailsView.configure(
                 self.viewModel.getFormattedHeight(),
@@ -95,12 +102,6 @@ final class PokemonDetailsViewController: UIViewController {
                 self.viewModel.getFormattedAbilities()
             )
             self.loadSpinner.stopAnimating()
-        }
-        
-        self.setPokemonImage(url: viewModel.getImageUrl()) { [weak self] image in
-            DispatchQueue.main.async {
-                self?.detailsView.configure(with: image)
-            }
         }
     }
     

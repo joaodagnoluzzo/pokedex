@@ -71,7 +71,7 @@ class PokemonViewModelTests: QuickSpec {
                 
                     let expectedName = "Pidgey"
                     
-                    apiManager.pokeTypeDetail = PokemonDetailsModel(
+                    apiManager.pokeTypeDetail = PokemonListModel(
                         name: "Fire",
                         pokemon: [
                             PokemonPreview(pokemon: PokeUrl(name: "Raichu", url: "raichu.com")),

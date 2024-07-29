@@ -13,6 +13,8 @@ import Nimble
 
 class PokemonDetailsViewModelTests: QuickSpec {
     
+    static let bundle = Bundle(for: PokemonDetailsViewModel.self)
+    
     override class func spec() {
         
         var apiManager: APIManagerMock!
@@ -62,7 +64,7 @@ class PokemonDetailsViewModelTests: QuickSpec {
             context("when fetching pokemon details and receive data") {
                 it("should fill pokemon details") {
                     
-                    apiManager.pokemon = PokemonModel(abilities: [Abilities(ability: Ability(name: "Water Canon", url: "ability.com"), is_hidden: false, slot: 1)], name: "Blastoise", weight: 210, sprites: Sprites(frontDefault: "blastoise.png.com"), height: 182)
+                    apiManager.pokemon = PokemonDetailsModel(abilities: [Abilities(ability: Ability(name: "Water Canon", url: "ability.com"), is_hidden: false, slot: 1)], name: "Blastoise", weight: 210, sprites: Sprites(frontDefault: "blastoise.png.com"), height: 182)
                     
                     var error: Error?
                     
@@ -81,7 +83,7 @@ class PokemonDetailsViewModelTests: QuickSpec {
                 it("should provide formatted data for height") {
                     let expectedHeight = "Height 1.8 m"
                     
-                    apiManager.pokemon = PokemonModel(abilities: [Abilities(ability: Ability(name: "Water Canon", url: "ability.com"), is_hidden: false, slot: 1)], name: "Blastoise", weight: 210, sprites: Sprites(frontDefault: "blastoise.png.com"), height: 18)
+                    apiManager.pokemon = PokemonDetailsModel(abilities: [Abilities(ability: Ability(name: "Water Canon", url: "ability.com"), is_hidden: false, slot: 1)], name: "Blastoise", weight: 210, sprites: Sprites(frontDefault: "blastoise.png.com"), height: 18)
                     
                     waitUntil { done in
                         viewModel.retrievePokemonDetails { _ in
@@ -95,7 +97,7 @@ class PokemonDetailsViewModelTests: QuickSpec {
                 it("should provide formatted data for weight") {
                     let expectedWeight = "Weight 21.0 Kg"
                     
-                    apiManager.pokemon = PokemonModel(abilities: [Abilities(ability: Ability(name: "Water Canon", url: "ability.com"), is_hidden: false, slot: 1)], name: "Blastoise", weight: 210, sprites: Sprites(frontDefault: "blastoise.png.com"), height: 18)
+                    apiManager.pokemon = PokemonDetailsModel(abilities: [Abilities(ability: Ability(name: "Water Canon", url: "ability.com"), is_hidden: false, slot: 1)], name: "Blastoise", weight: 210, sprites: Sprites(frontDefault: "blastoise.png.com"), height: 18)
                     
                     waitUntil { done in
                         viewModel.retrievePokemonDetails { _ in
@@ -109,7 +111,7 @@ class PokemonDetailsViewModelTests: QuickSpec {
                 it("should provide formatted data for abilities") {
                     let expectedAbilities = "Water Canon\nWater Tornado\n"
                     
-                    apiManager.pokemon = PokemonModel(abilities: [Abilities(ability: Ability(name: "Water Canon", url: "ability.com"), is_hidden: false, slot: 1), Abilities(ability: Ability(name: "Water Tornado", url: "ability2.com"), is_hidden: false, slot: 2)], name: "Blastoise", weight: 210, sprites: Sprites(frontDefault: "blastoise.png.com"), height: 18)
+                    apiManager.pokemon = PokemonDetailsModel(abilities: [Abilities(ability: Ability(name: "Water Canon", url: "ability.com"), is_hidden: false, slot: 1), Abilities(ability: Ability(name: "Water Tornado", url: "ability2.com"), is_hidden: false, slot: 2)], name: "Blastoise", weight: 210, sprites: Sprites(frontDefault: "blastoise.png.com"), height: 18)
                     
                     waitUntil { done in
                         viewModel.retrievePokemonDetails { _ in
@@ -120,22 +122,30 @@ class PokemonDetailsViewModelTests: QuickSpec {
                     expect(viewModel.getFormattedAbilities()).to(equal(expectedAbilities))
                 }
             }
+            context("when asked for pokemon image url data and there's no url") {
+                it("should return an empty string") {
+                    expect(viewModel.getImageUrl()).to(beEmpty())
+                }
+                
+            }
         }
         
         describe("fetching pokemon image") {
             context("when fetching pokemon image data and url is invalid") {
-                it("should not provide image") {
+                it("should set default image") {
                     
+                    let expectedImage = UIImage(named: "defaultImage", in: bundle, compatibleWith: nil)
                     var image: UIImage?
                     
                     waitUntil { done in
-                        viewModel.retrievePokemonImage(imageUrl: "asdas") { responseImage in
+                        viewModel.retrievePokemonImage(imageUrl: "") { responseImage in
                             image = responseImage
                             done()
                         }
                     }
                     
-                    expect(image).to(beNil())
+                    expect(image).to(equal(expectedImage))
+                    expect(viewModel.getImageUrl()).to(beEmpty())
                 }
             }
         }

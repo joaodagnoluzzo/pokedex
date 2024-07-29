@@ -1,5 +1,5 @@
 //
-//  PokemonDetailsModel.swift
+//  PokemonModel.swift
 //  Pokedex
 //
 //  Created by João Pedro Cappelletto D'Agnoluzzo on 23/12/19.
@@ -9,22 +9,39 @@
 import Foundation
 
 struct PokemonDetailsModel: Decodable {
+    
+    let abilities: [Abilities]
     let name: String
-    let pokemon: [PokemonPreview]
+    let weight: Int
+    let sprites: Sprites
+    let height: Int
 }
 
 extension PokemonDetailsModel {
-    init(){
+    init() {
+        abilities = []
         name = ""
-        pokemon = []
+        weight = 0
+        sprites = Sprites(frontDefault: "")
+        height = 0
     }
 }
 
-struct PokemonPreview: Decodable {
-    let pokemon: PokeUrl
+struct Abilities: Decodable {
+    let ability: Ability
+    let is_hidden: Bool
+    let slot: Int
 }
 
-struct PokeUrl: Decodable {
+struct Ability: Decodable {
     let name: String
     let url: String
+}
+
+struct Sprites: Decodable {
+    let frontDefault: String?
+    
+    enum CodingKeys: String, CodingKey {
+        case frontDefault = "front_default"
+    }
 }
