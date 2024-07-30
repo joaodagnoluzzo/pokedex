@@ -30,12 +30,11 @@ class ApiManagerTests: QuickSpec {
         
         describe("requesting") {
             context("when fetching poketypes and there's no results") {
-                beforeEach {
+                it("should return an empty list") {
                     networkSession.data = "{\"count\":0, \"results\":[]}".data(using: .utf8)
                     networkSession.error = nil
-                }
                 
-                it("should return an empty list") {
+                    
                     var pokeType: PokeTypeModel?
                     var error: Error?
                     
@@ -58,13 +57,68 @@ class ApiManagerTests: QuickSpec {
                 }
             }
             
+            context("when fetching poketypes and the result is an empty json") {
+                it("should return an empty list") {
+                    
+                    networkSession.data = "{}".data(using: .utf8)
+                    networkSession.error = nil
+                
+                    
+                    var pokeType: PokeTypeModel?
+                    var error: Error?
+                    
+                    waitUntil { (done) in
+                        apiManager.fetchPokeTypes { (result) in
+                            switch result {
+                            case .success(let pokeTypeResponse):
+                                pokeType = pokeTypeResponse
+                            case .failure(let responseError):
+                                error = responseError
+                            }
+                            done()
+                        }
+                    }
+                    
+                    expect(error).to(beNil())
+                    expect(pokeType).toNot(beNil())
+                    expect(pokeType?.count).to(equal(0))
+                    expect(pokeType?.results.count).to(equal(0))
+                }
+            }
+            
+            context("when fetching poketypes and the result and an error occurs") {
+                it("should return error") {
+                    
+                    networkSession.data = nil
+                    networkSession.error = APIError(info: "Expected error")
+                
+                    
+                    var pokeType: PokeTypeModel?
+                    var error: Error?
+                    
+                    waitUntil { (done) in
+                        apiManager.fetchPokeTypes { (result) in
+                            switch result {
+                            case .success(let pokeTypeResponse):
+                                pokeType = pokeTypeResponse
+                            case .failure(let responseError):
+                                error = responseError
+                            }
+                            done()
+                        }
+                    }
+                    
+                    expect(error).toNot(beNil())
+                    expect(pokeType).to(beNil())
+                }
+            }
+            
             context("when fetching poketypes and there's a list of results") {
-                beforeEach {
+                it("should return the a list of decoded PokeTypeModel") {
+                
                     networkSession.data = TestHelper.pokeTypesResult()
                     networkSession.error = nil
-                }
                 
-                it("should return the a list of decoded PokeTypeModel") {
                     var pokeType: PokeTypeModel?
                     var error: Error?
                     
@@ -112,6 +166,82 @@ class ApiManagerTests: QuickSpec {
                 expect(error).to(beNil())
                 expect(pokemonList).toNot(beNil())
                 expect(pokemonList?.pokemon).to(beEmpty())
+            }
+        }
+        
+        context("when requesting pokemon for a type and there's no results") {
+            it("should return an empty list") {
+                
+                networkSession.data = "{}".data(using: .utf8)
+                networkSession.error = nil
+                
+                var pokemonList: PokemonListModel?
+                var error: Error?
+                
+                waitUntil { done in
+                    apiManager.fetchPokemonsForType(url: "eletricPokemon.com") { result in
+                        switch result {
+                        case .success(let data):
+                            pokemonList = data
+                        case .failure(let responseError):
+                            error = responseError
+                        }
+                        done()
+                    }
+                }
+                
+                expect(error).to(beNil())
+                expect(pokemonList).toNot(beNil())
+                expect(pokemonList?.pokemon).to(beEmpty())
+            }
+        }
+        
+        context("when requesting pokemon for a type and an error occurs") {
+            it("should return error") {
+                
+                networkSession.data = nil
+                networkSession.error = APIError(info: "Expected error")
+                
+                var pokemonList: PokemonListModel?
+                var error: Error?
+                
+                waitUntil { done in
+                    apiManager.fetchPokemonsForType(url: "eletricPokemon.com") { result in
+                        switch result {
+                        case .success(let data):
+                            pokemonList = data
+                        case .failure(let responseError):
+                            error = responseError
+                        }
+                        done()
+                    }
+                }
+                
+                expect(error).toNot(beNil())
+                expect(pokemonList).to(beNil())
+            }
+        }
+        
+        context("when requesting pokemon for a type and url is invalid") {
+            it("should return error") {
+                
+                var pokemonList: PokemonListModel?
+                var error: Error?
+                
+                waitUntil { done in
+                    apiManager.fetchPokemonsForType(url: "eletricPokemon.com/ invalid url") { result in
+                        switch result {
+                        case .success(let data):
+                            pokemonList = data
+                        case .failure(let responseError):
+                            error = responseError
+                        }
+                        done()
+                    }
+                }
+                
+                expect(error).toNot(beNil())
+                expect(pokemonList).to(beNil())
             }
         }
         
@@ -170,6 +300,55 @@ class ApiManagerTests: QuickSpec {
             }
         }
         
+        context("when requesting pokemon details and an error occurs") {
+            it("should return error") {
+                
+                networkSession.data = nil
+                networkSession.error = APIError(info: "Expected error")
+                
+                var pokemon: PokemonDetailsModel?
+                var error: Error?
+                
+                waitUntil { done in
+                    apiManager.fetchPokemonDetails(url: "firePokemon.com") { result in
+                        switch result {
+                        case .success(let data):
+                            pokemon = data
+                        case .failure(let responseError):
+                            error = responseError
+                        }
+                        done()
+                    }
+                }
+                
+                expect(error).toNot(beNil())
+                expect(pokemon).to(beNil())
+            }
+        }
+        
+        context("when requesting pokemon details and the url is invalid") {
+            it("should return error") {
+                
+                var pokemon: PokemonDetailsModel?
+                var error: Error?
+                
+                waitUntil { done in
+                    apiManager.fetchPokemonDetails(url: "firePokemon.com/ invalid url") { result in
+                        switch result {
+                        case .success(let data):
+                            pokemon = data
+                        case .failure(let responseError):
+                            error = responseError
+                        }
+                        done()
+                    }
+                }
+                
+                expect(error).toNot(beNil())
+                expect(pokemon).to(beNil())
+            }
+        }
+        
         context("when requesting pokemon details") {
             it("should return details for that pokemon") {
 
@@ -197,6 +376,60 @@ class ApiManagerTests: QuickSpec {
                 expect(pokemon).toNot(beNil())
                 expect(pokemon?.name).to(equal(expectedName))
                 expect(pokemon?.abilities.count).to(equal(3))
+            }
+        }
+        
+        context("when fetching image data") {
+            it("should return data from the api") {
+                
+                networkSession.data = Data()
+                networkSession.error = nil
+                
+                var data: Data?
+                
+                waitUntil { done in
+                    apiManager.fetchData(from: "someurl.com") { result in
+                        data = result
+                        done()
+                    }
+                }
+                
+                expect(data).toNot(beNil())
+            }
+        }
+        
+        context("when fetching image data and there's an error") {
+            it("should return a nil object") {
+                
+                networkSession.data = nil
+                networkSession.error = APIError(info: "Expected error")
+                
+                var data: Data?
+                
+                waitUntil { done in
+                    apiManager.fetchData(from: "someurl.com") { result in
+                        data = result
+                        done()
+                    }
+                }
+                
+                expect(data).to(beNil())
+            }
+        }
+        
+        context("when fetching image data and the url is invalid") {
+            it("should return a nil object") {
+                
+                var data: Data?
+                
+                waitUntil { done in
+                    apiManager.fetchData(from: "someurl.com/ invalid url") { result in
+                        data = result
+                        done()
+                    }
+                }
+                
+                expect(data).to(beNil())
             }
         }
     }

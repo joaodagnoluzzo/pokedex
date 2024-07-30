@@ -28,15 +28,21 @@ class EmptyTypeSpec: QuickSpec {
         
         describe("Access empty pokemon type") {
             context("when selecting a pokemon type") {
-                it("should present an error") {
+                it("should present an error and return to type selection") {
                     let _ = app.cells.element.waitForExistence(timeout: 1)
-                    app.cells.containing(.staticText, identifier: "Shadow").element.tap()
-                    let alert = app!.alerts["Oops"]
-                    alert.waitForExistence(timeout: 1)
-                    alert.buttons["OK"].tap()
+                    app.swipeUp()
+                    
+                    let _ = app.cells.element.waitForExistence(timeout: 1)
+                    app.cells.containing(.staticText, identifier: "Stellar").element.tap()
+                    
+                    let alert = app.alerts["Oops"]
+                    let _ = alert.waitForExistence(timeout: 1)
+                    alert.buttons["Ok"].tap()
+                    
                     let _ = app.images.element(boundBy: 0).waitForExistence(timeout: 1)
-                    let count = app!.tables.element(boundBy: 0).cells.count
-                    expect(count).to(equal(0))
+                    let title = app.navigationBars["Pokémon Types"].identifier
+                    
+                    expect(title).to(equal("Pokémon Types"))
                 }
             }
         }

@@ -19,7 +19,7 @@ struct Constants {
     }
     
     struct PokeTypes {
-        static let title = "Pokemon Types"
+        static let title = "Pokémon Types"
         static let titleSize: CGFloat = 25
         static let fontStrokeWidth: Float = 4
     }
