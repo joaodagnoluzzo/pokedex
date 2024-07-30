@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		28690B042C584A4B00DF73BB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CFB6708223B1537200F33E80 /* Assets.xcassets */; };
+		2878F75C2C58561E0004CEB2 /* APIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2878F75B2C58561E0004CEB2 /* APIError.swift */; };
 		28AF5C592C5460E300257B34 /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AF5C582C5460E300257B34 /* UIColor+Extensions.swift */; };
 		28AF5C5D2C54620500257B34 /* UIActivityIndicatorView+CustomConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AF5C5C2C54620500257B34 /* UIActivityIndicatorView+CustomConfig.swift */; };
 		28AF5C5F2C54625D00257B34 /* UIAlertController+CustomInit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AF5C5E2C54625D00257B34 /* UIAlertController+CustomInit.swift */; };
@@ -74,6 +75,7 @@
 
 /* Begin PBXFileReference section */
 		0D59EB01A4057813708D42FF /* Pods-Pokedex.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pokedex.debug.xcconfig"; path = "Target Support Files/Pods-Pokedex/Pods-Pokedex.debug.xcconfig"; sourceTree = "<group>"; };
+		2878F75B2C58561E0004CEB2 /* APIError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIError.swift; sourceTree = "<group>"; };
 		28AF5C582C5460E300257B34 /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
 		28AF5C5C2C54620500257B34 /* UIActivityIndicatorView+CustomConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIActivityIndicatorView+CustomConfig.swift"; sourceTree = "<group>"; };
 		28AF5C5E2C54625D00257B34 /* UIAlertController+CustomInit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+CustomInit.swift"; sourceTree = "<group>"; };
@@ -262,6 +264,7 @@
 			isa = PBXGroup;
 			children = (
 				CFEBCC4023B2271A004E0F73 /* APIManager.swift */,
+				2878F75B2C58561E0004CEB2 /* APIError.swift */,
 			);
 			path = "API Interface";
 			sourceTree = "<group>";
@@ -603,6 +606,7 @@
 				28D9BC142C558835008DFB3C /* UIFont+Extensions.swift in Sources */,
 				CFEBCC4123B2271A004E0F73 /* APIManager.swift in Sources */,
 				28C850812C57477800C4F690 /* APIManagerMock.swift in Sources */,
+				2878F75C2C58561E0004CEB2 /* APIError.swift in Sources */,
 				CFEBCC3723B1553F004E0F73 /* PokeTypeTableViewController.swift in Sources */,
 				28AF5C5F2C54625D00257B34 /* UIAlertController+CustomInit.swift in Sources */,
 				28AF5C642C54654500257B34 /* PokeTypeViewModel.swift in Sources */,

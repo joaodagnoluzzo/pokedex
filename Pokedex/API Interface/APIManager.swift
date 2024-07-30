@@ -20,7 +20,10 @@ final class APIManager: APIManagerProtocol {
     func fetchPokeTypes(completion: @escaping (Result<PokeTypeModel, Error>)-> Void) {
               
         let requestHttp = Constants.API.baseUrl + Constants.API.Endpoints.type
-        guard let requestURL = URL(string: requestHttp) else { return }
+        guard let requestURL = URL(string: requestHttp) else {
+            completion(.failure(APIError(info: Constants.Error.invalidUrl)))
+            return
+        }
         
         self.session.loadData(requestUrl: requestURL, completionHandler: { (data, response, error) -> Void in
           
@@ -47,7 +50,10 @@ final class APIManager: APIManagerProtocol {
     
     func fetchPokemonsForType(url: String, completion: @escaping (Result<PokemonListModel, Error>)-> Void){
         
-        guard let requestUrl = URL(string:url) else { return }
+        guard let requestUrl = URL(string:url) else {
+            completion(.failure(APIError(info: Constants.Error.invalidUrl)))
+            return
+        }
         
         self.session.loadData(requestUrl: requestUrl, completionHandler: { (data, _, error) -> Void in
             if let error = error {
@@ -73,7 +79,10 @@ final class APIManager: APIManagerProtocol {
    
     func fetchPokemonDetails(url: String, completion: @escaping (Result<PokemonDetailsModel, Error>) -> Void){
         
-        guard let requestUrl = URL(string: url) else { return }
+        guard let requestUrl = URL(string: url) else {
+            completion(.failure(APIError(info: Constants.Error.invalidUrl)))
+            return
+        }
         
         self.session.loadData(requestUrl: requestUrl, completionHandler: { (data, _, error) -> Void in
             
@@ -99,7 +108,10 @@ final class APIManager: APIManagerProtocol {
     }
     
     func fetchData(from url: String, completion: @escaping (Data?) -> Void) {
-        guard let urlRequest = URL(string: url) else { return }
+        guard let urlRequest = URL(string: url) else {
+            completion(nil)
+            return
+        }
         
         self.session.loadData(requestUrl: urlRequest) { data, _, error in
             guard let data = data, error == nil else {

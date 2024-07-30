@@ -45,7 +45,6 @@ final class PokeTypeTableViewController: UIViewController {
     private func retrieveData(){
         loadingSpinner.startAnimating()
         
-        
         viewModel.retrievePokeTypes { [weak self] error in
             if error == nil {
                 self?.reloadList()
