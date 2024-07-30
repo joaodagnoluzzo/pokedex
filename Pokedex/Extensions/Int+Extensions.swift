@@ -13,11 +13,11 @@ extension Int {
     private var conversionFactor: Double { 0.1 }
     
     func toFormattedWeight() -> String {
-        return String(format: "Weight %.1f Kg", Double(self) * conversionFactor)
+        return String(format: "%.1f Kg", Double(self) * conversionFactor)
     }
     
     func toFormattedHeight() -> String {
-        return String(format: "Height %.1f m", Double(self) * conversionFactor)
+        return String(format: "%.1f m", Double(self) * conversionFactor)
     }
     
 }

@@ -14,11 +14,15 @@ class PokemonDetailsView: UIView {
     private var pokemonShareButton: UIBarButtonItem?
     private let imageView = UIImageView()
     private let infoLabel = UILabel()
-    private let heightLabel = UILabel()
     private let weightLabel = UILabel()
+    private let weightValueLabel = UILabel()
+    private let heightLabel = UILabel()
+    private let heightValueLabel = UILabel()
     private let abilitiesLabel = UILabel()
     private let abilitiesTextView = UITextView()
     private let imageActivityIndicator = PokedexActivityIndicatorView()
+    private var heightHStack = UIStackView()
+    private var weightHStack = UIStackView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -43,8 +47,8 @@ class PokemonDetailsView: UIView {
     }
     
     func configure(_ height: String, _ weight: String, _ abilities: String) {
-        heightLabel.text = height
-        weightLabel.text = weight
+        weightValueLabel.text = weight
+        heightValueLabel.text = height
         abilitiesTextView.text = abilities
         abilitiesTextView.customStyleAndFont(spacing: 20, size: 17)
     }
@@ -56,12 +60,19 @@ class PokemonDetailsView: UIView {
         setupInfoLabel()
         addSubview(infoLabel)
         
-        setupHeightLabel()
-        addSubview(heightLabel)
         
         setupWeightLabel()
-        addSubview(weightLabel)
+        setupWeightValueLabel()
         
+        setupWeightHStack()
+        addSubview(weightHStack)
+        
+        setupHeightLabel()
+        setupHeightValueLabel()
+        
+        setupHeightHStack()
+        addSubview(heightHStack)
+                
         setupAbilitiesLabel()
         addSubview(abilitiesLabel)
         
@@ -84,16 +95,38 @@ class PokemonDetailsView: UIView {
         infoLabel.translatesAutoresizingMaskIntoConstraints = false
     }
     
+    private func setupWeightHStack() {
+        weightHStack = createHStack(weightLabel, weightValueLabel)
+    }
+    
+    private func setupHeightHStack() {
+        heightHStack = createHStack(heightLabel, heightValueLabel)
+    }
+    
+    private func setupWeightLabel() {
+        weightLabel.text = "Weight:"
+        weightLabel.font = UIFont.customBodyFont(size: 16)
+        weightLabel.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    private func setupWeightValueLabel() {
+        weightValueLabel.text = "--.-- Kg"
+        weightValueLabel.font = UIFont.customBodyFont(size: 16)
+        weightValueLabel.textAlignment = .right
+        weightValueLabel.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
     private func setupHeightLabel() {
-        heightLabel.text = "Height: --.-- m"
+        heightLabel.text = "Height:"
         heightLabel.font = UIFont.customBodyFont(size: 16)
         heightLabel.translatesAutoresizingMaskIntoConstraints = false
     }
     
-    private func setupWeightLabel() {
-        weightLabel.text = "Weight: --.-- Kg"
-        weightLabel.font = UIFont.customBodyFont(size: 16)
-        weightLabel.translatesAutoresizingMaskIntoConstraints = false
+    private func setupHeightValueLabel() {
+        heightValueLabel.text = "--.-- m"
+        heightValueLabel.font = UIFont.customBodyFont(size: 16)
+        heightValueLabel.textAlignment = .right
+        heightValueLabel.translatesAutoresizingMaskIntoConstraints = false
     }
     
     private func setupAbilitiesLabel() {
@@ -104,15 +137,26 @@ class PokemonDetailsView: UIView {
     }
     
     private func setupAbilitiesTextView() {
-//        abilitiesTextView.text = "Abilities List"
         abilitiesTextView.font = UIFont.systemFont(ofSize: 16)
-//        abilitiesTextView.customStyleAndFont(spacing: 20, size: 17)
         abilitiesTextView.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    private func createHStack(_ labelLeft: UILabel, _ labelRight: UILabel) -> UIStackView {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution = .fillEqually
+        stackView.addArrangedSubview(labelLeft)
+        stackView.addArrangedSubview(labelRight)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        return stackView
     }
     
     private func setupConstraints() {
         let titleHeight: CGFloat = 34
         let titleWidth: CGFloat = 120
+        let margin: CGFloat = 32
+        let stackHeight: CGFloat = 30
         
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 24),
@@ -125,20 +169,24 @@ class PokemonDetailsView: UIView {
             infoLabel.heightAnchor.constraint(equalToConstant: titleHeight),
             infoLabel.widthAnchor.constraint(equalToConstant: titleWidth),
             
-            heightLabel.topAnchor.constraint(equalTo: infoLabel.bottomAnchor, constant: 16),
-            heightLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 32),
+            weightHStack.topAnchor.constraint(equalTo: infoLabel.bottomAnchor, constant: 16),
+            weightHStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: margin),
+            weightHStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -margin),
+            weightHStack.heightAnchor.constraint(equalToConstant: stackHeight),
             
-            weightLabel.topAnchor.constraint(equalTo: heightLabel.bottomAnchor, constant: 16),
-            weightLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 32),
-            
-            abilitiesLabel.topAnchor.constraint(equalTo: weightLabel.bottomAnchor, constant: 32),
+            heightHStack.topAnchor.constraint(equalTo: weightHStack.bottomAnchor, constant: 8),
+            heightHStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: margin),
+            heightHStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -margin),
+            heightHStack.heightAnchor.constraint(equalToConstant: stackHeight),
+
+            abilitiesLabel.topAnchor.constraint(equalTo: heightHStack.bottomAnchor, constant: 32),
             abilitiesLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             abilitiesLabel.heightAnchor.constraint(equalToConstant: titleHeight),
             abilitiesLabel.widthAnchor.constraint(equalToConstant: titleWidth),
-            
+
             abilitiesTextView.topAnchor.constraint(equalTo: abilitiesLabel.bottomAnchor, constant: 16),
-            abilitiesTextView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 32),
-            abilitiesTextView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -32),
+            abilitiesTextView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: margin),
+            abilitiesTextView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -margin),
             abilitiesTextView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -16)
         ])
     }

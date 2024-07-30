@@ -81,7 +81,7 @@ class PokemonDetailsViewModelTests: QuickSpec {
                 }
                 
                 it("should provide formatted data for height") {
-                    let expectedHeight = "Height 1.8 m"
+                    let expectedHeight = "1.8 m"
                     
                     apiManager.pokemon = PokemonDetailsModel(abilities: [Abilities(ability: Ability(name: "Water Canon", url: "ability.com"), is_hidden: false, slot: 1)], name: "Blastoise", weight: 210, sprites: Sprites(frontDefault: "blastoise.png.com"), height: 18)
                     
@@ -95,7 +95,7 @@ class PokemonDetailsViewModelTests: QuickSpec {
                 }
                 
                 it("should provide formatted data for weight") {
-                    let expectedWeight = "Weight 21.0 Kg"
+                    let expectedWeight = "21.0 Kg"
                     
                     apiManager.pokemon = PokemonDetailsModel(abilities: [Abilities(ability: Ability(name: "Water Canon", url: "ability.com"), is_hidden: false, slot: 1)], name: "Blastoise", weight: 210, sprites: Sprites(frontDefault: "blastoise.png.com"), height: 18)
                     
