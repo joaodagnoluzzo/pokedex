@@ -18,93 +18,16 @@ final class APIManager: APIManagerProtocol {
     }
     
     func fetchPokeTypes(completion: @escaping (Result<PokeTypeModel, Error>)-> Void) {
-              
         let requestHttp = Constants.API.baseUrl + Constants.API.Endpoints.type
-        guard let requestURL = URL(string: requestHttp) else {
-            completion(.failure(APIError(info: Constants.Error.invalidUrl)))
-            return
-        }
-        
-        self.session.loadData(requestUrl: requestURL, completionHandler: { (data, response, error) -> Void in
-          
-            if let error = error {
-                completion(.failure(error))
-            }
-            
-            if let data = data {
-                completion(.success(self.decodePokeType(data: data)))
-            }
-        })
-    }
-    
-    private func decodePokeType(data: Data) -> PokeTypeModel{
-        var pokeTypes = PokeTypeModel()
-        do {
-            let result = try JSONDecoder().decode(PokeTypeModel.self, from: data)
-            pokeTypes = result
-        } catch {
-            print("JSON Decoding Error: \(error)")
-        }
-        return pokeTypes
+        fetchAndDecodeData(from: requestHttp, completion: completion)
     }
     
     func fetchPokemonsForType(url: String, completion: @escaping (Result<PokemonListModel, Error>)-> Void){
-        
-        guard let requestUrl = URL(string:url) else {
-            completion(.failure(APIError(info: Constants.Error.invalidUrl)))
-            return
-        }
-        
-        self.session.loadData(requestUrl: requestUrl, completionHandler: { (data, _, error) -> Void in
-            if let error = error {
-                completion(.failure(error))
-            }
-            
-            if let data = data {
-                completion(.success(self.decodePokeTypeDetails(data: data)))
-            }
-        })
+        fetchAndDecodeData(from: url, completion: completion)
     }
     
-    private func decodePokeTypeDetails(data: Data) -> PokemonListModel {
-        var pokeTypeDetails = PokemonListModel()
-        do {
-            let result = try JSONDecoder().decode(PokemonListModel.self, from: data)
-            pokeTypeDetails = result
-        } catch {
-            print("JSON Decoding Error: \(error)")
-        }
-        return pokeTypeDetails
-    }
-   
     func fetchPokemonDetails(url: String, completion: @escaping (Result<PokemonDetailsModel, Error>) -> Void){
-        
-        guard let requestUrl = URL(string: url) else {
-            completion(.failure(APIError(info: Constants.Error.invalidUrl)))
-            return
-        }
-        
-        self.session.loadData(requestUrl: requestUrl, completionHandler: { (data, _, error) -> Void in
-            
-            if let error = error {
-                completion(.failure(error))
-            }
-            
-            if let data = data {
-                completion(.success(self.decodePokemonDetails(data: data)))
-            }
-        })
-    }
-    
-    private func decodePokemonDetails(data: Data) -> PokemonDetailsModel {
-        var pokemon = PokemonDetailsModel()
-        do {
-            let result = try JSONDecoder().decode(PokemonDetailsModel.self, from: data)
-            pokemon = result
-        } catch {
-            print("JSON Decoding Error: \(error)")
-        }
-        return pokemon
+        fetchAndDecodeData(from: url, completion: completion)
     }
     
     func fetchData(from url: String, completion: @escaping (Data?) -> Void) {
@@ -119,6 +42,33 @@ final class APIManager: APIManagerProtocol {
                 return
             }
             completion(data)
+        }
+    }
+    
+    private func fetchAndDecodeData<T:Decodable>(from url: String, completion: @escaping (Result<T, Error>) -> Void) {
+        
+        guard let requestUrl = URL(string: url) else {
+            completion(.failure(APIError(info: Constants.Error.invalidUrl)))
+            return
+        }
+        
+        self.session.loadData(requestUrl: requestUrl) { data, response, error in
+            if let error = error {
+                completion(.failure(APIError(info: "[fetchAndDecodeData] \(error)")))
+            }
+            
+            if let data = data {
+                completion(self.decodeData(data: data))
+            }
+        }
+    }
+    
+    private func decodeData<T:Decodable>(data: Data) -> Result<T, Error> {
+        do {
+            let decodedData = try JSONDecoder().decode(T.self, from: data)
+            return .success(decodedData)
+        } catch {
+            return .failure(APIError(info: "[decodeData] \(error)"))
         }
     }
 }

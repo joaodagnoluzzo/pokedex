@@ -58,7 +58,7 @@ class ApiManagerTests: QuickSpec {
             }
             
             context("when fetching poketypes and the result is an empty json") {
-                it("should return an empty list") {
+                it("should return error") {
                     
                     networkSession.data = "{}".data(using: .utf8)
                     networkSession.error = nil
@@ -79,10 +79,8 @@ class ApiManagerTests: QuickSpec {
                         }
                     }
                     
-                    expect(error).to(beNil())
-                    expect(pokeType).toNot(beNil())
-                    expect(pokeType?.count).to(equal(0))
-                    expect(pokeType?.results.count).to(equal(0))
+                    expect(error).toNot(beNil())
+                    expect(pokeType).to(beNil())
                 }
             }
             
@@ -170,7 +168,7 @@ class ApiManagerTests: QuickSpec {
         }
         
         context("when requesting pokemon for a type and there's no results") {
-            it("should return an empty list") {
+            it("should return error") {
                 
                 networkSession.data = "{}".data(using: .utf8)
                 networkSession.error = nil
@@ -190,9 +188,8 @@ class ApiManagerTests: QuickSpec {
                     }
                 }
                 
-                expect(error).to(beNil())
-                expect(pokemonList).toNot(beNil())
-                expect(pokemonList?.pokemon).to(beEmpty())
+                expect(error).toNot(beNil())
+                expect(pokemonList).to(beNil())
             }
         }
         
@@ -273,7 +270,7 @@ class ApiManagerTests: QuickSpec {
         }
         
         context("when requesting pokemon details and there's no results") {
-            it("should return an empty object") {
+            it("should return error") {
                 
                 networkSession.data = "{}".data(using: .utf8)
                 networkSession.error = nil
@@ -293,10 +290,8 @@ class ApiManagerTests: QuickSpec {
                     }
                 }
                 
-                expect(error).to(beNil())
-                expect(pokemon).toNot(beNil())
-                expect(pokemon?.name).to(beEmpty())
-                expect(pokemon?.abilities).to(beEmpty())
+                expect(error).toNot(beNil())
+                expect(pokemon).to(beNil())
             }
         }
         
