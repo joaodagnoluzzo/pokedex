@@ -8,7 +8,13 @@
 
 import UIKit
 
+protocol PokeTybeTableViewControllerDelegate: AnyObject {
+    func didSelectType(item: PokeTypeUrl)
+}
+
 final class PokeTypeTableViewController: UIViewController {
+    
+    weak var delegate: PokeTybeTableViewControllerDelegate?
 
     private let viewModel = PokeTypeViewModel()
     private var tableView = PokedexGenericTableView()
@@ -88,8 +94,7 @@ extension PokeTypeTableViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let item = viewModel.pokeTypeAt(index: indexPath.row)
-        let pokemonTableViewController = PokemonTableViewController(type: item)
-        navigationController?.pushViewController(pokemonTableViewController, animated: true)
+        delegate?.didSelectType(item: item)
     }
     
 }
