@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		28690B042C584A4B00DF73BB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CFB6708223B1537200F33E80 /* Assets.xcassets */; };
 		2878F75C2C58561E0004CEB2 /* APIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2878F75B2C58561E0004CEB2 /* APIError.swift */; };
+		288149532C5EC05A00CAD541 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288149522C5EC05A00CAD541 /* Coordinator.swift */; };
+		288149562C5EC0E300CAD541 /* ApplicationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288149552C5EC0E300CAD541 /* ApplicationCoordinator.swift */; };
 		28AF5C592C5460E300257B34 /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AF5C582C5460E300257B34 /* UIColor+Extensions.swift */; };
 		28AF5C5D2C54620500257B34 /* UIActivityIndicatorView+CustomConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AF5C5C2C54620500257B34 /* UIActivityIndicatorView+CustomConfig.swift */; };
 		28AF5C5F2C54625D00257B34 /* UIAlertController+CustomInit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AF5C5E2C54625D00257B34 /* UIAlertController+CustomInit.swift */; };
@@ -76,6 +78,8 @@
 /* Begin PBXFileReference section */
 		0D59EB01A4057813708D42FF /* Pods-Pokedex.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pokedex.debug.xcconfig"; path = "Target Support Files/Pods-Pokedex/Pods-Pokedex.debug.xcconfig"; sourceTree = "<group>"; };
 		2878F75B2C58561E0004CEB2 /* APIError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIError.swift; sourceTree = "<group>"; };
+		288149522C5EC05A00CAD541 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		288149552C5EC0E300CAD541 /* ApplicationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationCoordinator.swift; sourceTree = "<group>"; };
 		28AF5C582C5460E300257B34 /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
 		28AF5C5C2C54620500257B34 /* UIActivityIndicatorView+CustomConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIActivityIndicatorView+CustomConfig.swift"; sourceTree = "<group>"; };
 		28AF5C5E2C54625D00257B34 /* UIAlertController+CustomInit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+CustomInit.swift"; sourceTree = "<group>"; };
@@ -162,6 +166,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		288149542C5EC0C900CAD541 /* Coordinators */ = {
+			isa = PBXGroup;
+			children = (
+				288149552C5EC0E300CAD541 /* ApplicationCoordinator.swift */,
+			);
+			path = Coordinators;
+			sourceTree = "<group>";
+		};
 		28AF5C602C5463C400257B34 /* PokeTypes */ = {
 			isa = PBXGroup;
 			children = (
@@ -274,6 +286,7 @@
 			children = (
 				CFB15CA023C760BF0059CB31 /* NetworkSession.swift */,
 				CFB15CAA23C7A5880059CB31 /* APIManagerProtocol.swift */,
+				288149522C5EC05A00CAD541 /* Coordinator.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -303,6 +316,7 @@
 		CFB6707823B1537200F33E80 /* Pokedex */ = {
 			isa = PBXGroup;
 			children = (
+				288149542C5EC0C900CAD541 /* Coordinators */,
 				28AF5C622C5464D200257B34 /* UIComponents */,
 				28AF5C602C5463C400257B34 /* PokeTypes */,
 				28AF5C612C54640100257B34 /* Pokemons */,
@@ -612,6 +626,8 @@
 				28AF5C642C54654500257B34 /* PokeTypeViewModel.swift in Sources */,
 				CFEBCC3423B15522004E0F73 /* PokemonDetailsModel.swift in Sources */,
 				28AF5C682C54666800257B34 /* PokemonDetailsViewModel.swift in Sources */,
+				288149562C5EC0E300CAD541 /* ApplicationCoordinator.swift in Sources */,
+				288149532C5EC05A00CAD541 /* Coordinator.swift in Sources */,
 				28FCD4772C56CB2B0064760C /* UINavigationBar+Extensions.swift in Sources */,
 				28AF5C592C5460E300257B34 /* UIColor+Extensions.swift in Sources */,
 				28FCD4732C56B8810064760C /* PokedexActivityIndicatorView.swift in Sources */,

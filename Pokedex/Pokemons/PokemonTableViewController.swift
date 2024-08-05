@@ -8,8 +8,14 @@
 
 import UIKit
 
+protocol PokemonTableViewControllerDelegate: AnyObject {
+    func didSelectPokemon(item: PokeUrl)
+}
+
 final class PokemonTableViewController: UIViewController {
 
+    weak var delegate: PokemonTableViewControllerDelegate?
+    
     private var tableView = PokedexGenericTableView()
     private var viewModel: PokemonViewModel!
     private let loadSpinner = PokedexActivityIndicatorView()
@@ -115,8 +121,7 @@ extension PokemonTableViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let item = viewModel.pokemonAt(index: indexPath.row)
-        let detailsViewController = PokemonDetailsViewController(pokemon: item)
-        navigationController?.pushViewController(detailsViewController, animated: true)
+        delegate?.didSelectPokemon(item: item)
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
