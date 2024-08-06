@@ -53,6 +53,6 @@ struct Constants {
         static let pokemonEscaped = "Couldn't catch this {pokemon})"
         static let pokeTypesNotFound = "PokeTypes not found! Check your Pokenet connection."
         static let acceptLabel = "Ok"
-        static let invalidUrl = "Invalid url"
+        static let noMessage = "No error message"
     }
 }

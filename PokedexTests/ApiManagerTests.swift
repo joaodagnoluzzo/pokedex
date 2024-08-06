@@ -31,12 +31,13 @@ class ApiManagerTests: QuickSpec {
         describe("requesting") {
             context("when fetching poketypes and there's no results") {
                 it("should return an empty list") {
+                    networkSession.response = TestHelper.response200()
                     networkSession.data = "{\"count\":0, \"results\":[]}".data(using: .utf8)
                     networkSession.error = nil
                 
                     
                     var pokeType: PokeTypeModel?
-                    var error: Error?
+                    var error: NetworkError?
                     
                     waitUntil { (done) in
                         apiManager.fetchPokeTypes { (result) in
@@ -60,12 +61,13 @@ class ApiManagerTests: QuickSpec {
             context("when fetching poketypes and the result is an empty json") {
                 it("should return error") {
                     
+                    networkSession.response = TestHelper.response200()
                     networkSession.data = "{}".data(using: .utf8)
                     networkSession.error = nil
                 
                     
                     var pokeType: PokeTypeModel?
-                    var error: Error?
+                    var error: NetworkError?
                     
                     waitUntil { (done) in
                         apiManager.fetchPokeTypes { (result) in
@@ -84,15 +86,15 @@ class ApiManagerTests: QuickSpec {
                 }
             }
             
-            context("when fetching poketypes and the result and an error occurs") {
+            context("when fetching poketypes and an error occurs") {
                 it("should return error") {
                     
                     networkSession.data = nil
-                    networkSession.error = APIError(info: "Expected error")
+                    networkSession.error = NetworkMockError()
                 
                     
                     var pokeType: PokeTypeModel?
-                    var error: Error?
+                    var error: NetworkError?
                     
                     waitUntil { (done) in
                         apiManager.fetchPokeTypes { (result) in
@@ -114,11 +116,12 @@ class ApiManagerTests: QuickSpec {
             context("when fetching poketypes and there's a list of results") {
                 it("should return the a list of decoded PokeTypeModel") {
                 
+                    networkSession.response = TestHelper.response200()
                     networkSession.data = TestHelper.pokeTypesResult()
                     networkSession.error = nil
                 
                     var pokeType: PokeTypeModel?
-                    var error: Error?
+                    var error: NetworkError?
                     
                     waitUntil { (done) in
                         apiManager.fetchPokeTypes { (result) in
@@ -142,12 +145,12 @@ class ApiManagerTests: QuickSpec {
         
         context("when requesting pokemon for a type and there's no results") {
             it("should return an empty list") {
-                
+                networkSession.response = TestHelper.response200()
                 networkSession.data = "{\"name\":\"fire\", \"pokemon\":[]}".data(using: .utf8)
                 networkSession.error = nil
                 
                 var pokemonList: PokemonListModel?
-                var error: Error?
+                var error: NetworkError?
                 
                 waitUntil { done in
                     apiManager.fetchPokemonsForType(url: "eletricPokemon.com") { result in
@@ -174,7 +177,7 @@ class ApiManagerTests: QuickSpec {
                 networkSession.error = nil
                 
                 var pokemonList: PokemonListModel?
-                var error: Error?
+                var error: NetworkError?
                 
                 waitUntil { done in
                     apiManager.fetchPokemonsForType(url: "eletricPokemon.com") { result in
@@ -197,10 +200,10 @@ class ApiManagerTests: QuickSpec {
             it("should return error") {
                 
                 networkSession.data = nil
-                networkSession.error = APIError(info: "Expected error")
+                networkSession.error = NetworkMockError()
                 
                 var pokemonList: PokemonListModel?
-                var error: Error?
+                var error: NetworkError?
                 
                 waitUntil { done in
                     apiManager.fetchPokemonsForType(url: "eletricPokemon.com") { result in
@@ -223,7 +226,7 @@ class ApiManagerTests: QuickSpec {
             it("should return error") {
                 
                 var pokemonList: PokemonListModel?
-                var error: Error?
+                var error: NetworkError?
                 
                 waitUntil { done in
                     apiManager.fetchPokemonsForType(url: "eletricPokemon.com/ invalid url") { result in
@@ -245,11 +248,12 @@ class ApiManagerTests: QuickSpec {
         context("when requesting pokemon for a type") {
             it("should return a list of pokemons for that type") {
                 
+                networkSession.response = TestHelper.response200()
                 networkSession.data = TestHelper.pokemonListResult()
                 networkSession.error = nil
                 
                 var pokemonList: PokemonListModel?
-                var error: Error?
+                var error: NetworkError?
                 
                 waitUntil { done in
                     apiManager.fetchPokemonsForType(url: "waterPokemon.com") { result in
@@ -276,7 +280,7 @@ class ApiManagerTests: QuickSpec {
                 networkSession.error = nil
                 
                 var pokemon: PokemonDetailsModel?
-                var error: Error?
+                var error: NetworkError?
                 
                 waitUntil { done in
                     apiManager.fetchPokemonDetails(url: "firePokemon.com") { result in
@@ -299,10 +303,10 @@ class ApiManagerTests: QuickSpec {
             it("should return error") {
                 
                 networkSession.data = nil
-                networkSession.error = APIError(info: "Expected error")
+                networkSession.error = NetworkMockError()
                 
                 var pokemon: PokemonDetailsModel?
-                var error: Error?
+                var error: NetworkError?
                 
                 waitUntil { done in
                     apiManager.fetchPokemonDetails(url: "firePokemon.com") { result in
@@ -325,7 +329,7 @@ class ApiManagerTests: QuickSpec {
             it("should return error") {
                 
                 var pokemon: PokemonDetailsModel?
-                var error: Error?
+                var error: NetworkError?
                 
                 waitUntil { done in
                     apiManager.fetchPokemonDetails(url: "firePokemon.com/ invalid url") { result in
@@ -346,14 +350,14 @@ class ApiManagerTests: QuickSpec {
         
         context("when requesting pokemon details") {
             it("should return details for that pokemon") {
-
+                networkSession.response = TestHelper.response200()
                 networkSession.data = TestHelper.pokemonDetails()
                 networkSession.error = nil
                 
                 let expectedName = "primeape"
                 
                 var pokemon: PokemonDetailsModel?
-                var error: Error?
+                var error: NetworkError?
 
                 waitUntil { done in
                     apiManager.fetchPokemonDetails(url: "darkPokemon.com") { result in
@@ -377,6 +381,7 @@ class ApiManagerTests: QuickSpec {
         context("when fetching image data") {
             it("should return data from the api") {
                 
+                networkSession.response = TestHelper.response200()
                 networkSession.data = Data()
                 networkSession.error = nil
                 
@@ -397,7 +402,7 @@ class ApiManagerTests: QuickSpec {
             it("should return a nil object") {
                 
                 networkSession.data = nil
-                networkSession.error = APIError(info: "Expected error")
+                networkSession.error = NetworkMockError()
                 
                 var data: Data?
                 

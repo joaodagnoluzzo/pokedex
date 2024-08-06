@@ -10,5 +10,5 @@ import Foundation
 
 protocol NetworkSession {
     
-    func loadData(requestUrl: URL, completionHandler: @escaping (Data?, URLResponse?, Error?)-> Void)
+    func loadData(requestUrl: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void)
 }

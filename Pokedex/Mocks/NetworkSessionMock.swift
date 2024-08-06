@@ -18,3 +18,6 @@ final class NetworkSessionMock : NetworkSession {
         return completionHandler(data, response, error)
     }
 }
+
+struct NetworkMockError: Error {
+}

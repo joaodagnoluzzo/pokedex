@@ -17,16 +17,16 @@ final class APIManager: APIManagerProtocol {
         self.session = session
     }
     
-    func fetchPokeTypes(completion: @escaping (Result<PokeTypeModel, Error>)-> Void) {
+    func fetchPokeTypes(completion: @escaping (Result<PokeTypeModel, NetworkError>)-> Void) {
         let requestHttp = Constants.API.baseUrl + Constants.API.Endpoints.type
         fetchAndDecodeData(from: requestHttp, completion: completion)
     }
     
-    func fetchPokemonsForType(url: String, completion: @escaping (Result<PokemonListModel, Error>)-> Void){
+    func fetchPokemonsForType(url: String, completion: @escaping (Result<PokemonListModel, NetworkError>)-> Void){
         fetchAndDecodeData(from: url, completion: completion)
     }
     
-    func fetchPokemonDetails(url: String, completion: @escaping (Result<PokemonDetailsModel, Error>) -> Void){
+    func fetchPokemonDetails(url: String, completion: @escaping (Result<PokemonDetailsModel, NetworkError>) -> Void){
         fetchAndDecodeData(from: url, completion: completion)
     }
     
@@ -36,39 +36,48 @@ final class APIManager: APIManagerProtocol {
             return
         }
         
-        self.session.loadData(requestUrl: urlRequest) { data, _, error in
-            guard let data = data, error == nil else {
+        self.session.loadData(requestUrl: urlRequest) { data, response, error in
+            guard let response = response as? HTTPURLResponse,
+                  response.statusCode == 200,
+                  let data = data,
+                  error == nil
+            else {
                 completion(nil)
                 return
             }
+            
             completion(data)
         }
     }
     
-    private func fetchAndDecodeData<T:Decodable>(from url: String, completion: @escaping (Result<T, Error>) -> Void) {
+    private func fetchAndDecodeData<T:Decodable>(from url: String, completion: @escaping (Result<T, NetworkError>) -> Void) {
         
         guard let requestUrl = URL(string: url) else {
-            completion(.failure(APIError(info: Constants.Error.invalidUrl)))
+            completion(.failure(.invalidUrl))
             return
         }
         
         self.session.loadData(requestUrl: requestUrl) { data, response, error in
-            if let error = error {
-                completion(.failure(APIError(info: "[fetchAndDecodeData] \(error)")))
+            
+            guard let response = response as? HTTPURLResponse,
+                  response.statusCode == 200,
+                  let data = data,
+                  error == nil
+            else {
+                completion(.failure(.fetchData(error?.localizedDescription ?? Constants.Error.noMessage)))
+                return
             }
             
-            if let data = data {
-                completion(self.decodeData(data: data))
-            }
+            completion(self.decodeData(data: data))
         }
     }
     
-    private func decodeData<T:Decodable>(data: Data) -> Result<T, Error> {
+    private func decodeData<T:Decodable>(data: Data) -> Result<T, NetworkError> {
         do {
             let decodedData = try JSONDecoder().decode(T.self, from: data)
             return .success(decodedData)
         } catch {
-            return .failure(APIError(info: "[decodeData] \(error)"))
+            return .failure(.decodeData(error.localizedDescription))
         }
     }
 }

@@ -10,6 +10,10 @@ import Foundation
 
 class TestHelper {
     
+    static func response200() -> HTTPURLResponse? {
+        guard let url = URL(string: "someurl.com") else { return nil }
+        return HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)
+    }
     
     static func pokeTypesResult() -> Data {
         let data = """
